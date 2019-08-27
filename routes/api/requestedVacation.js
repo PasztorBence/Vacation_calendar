@@ -25,7 +25,13 @@ router.post('/', passport.authenticate('jwt', {session: false}),
                 end_date: req.body.end_date,
                 description: req.body.description
             });
+            newRequest
+                .save()
+                .then(request => res.json(request))
+                .catch(err => console.log(err));
         }
 
     }
 );
+
+module.exports = router;
