@@ -63,34 +63,20 @@ router.get('/:id',
     }
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//@route        POST api/request/:request_id
-//@description  Delete a request by id
+//@route        DELETE api/request/:id
+//@description  Delete request by id
 //@access       Private
-router.delete('/:request_id',
+router.delete('/:id',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
         RequestedVacation
-            .findone(req.params.id)
-            .then(request => res.json(request))
-    });
+        //.findById(req.params.id)
+        //.remove()
+            .deleteOne({_id: req.params.id})
+            .then(res.json({succes: true}))
+            .catch(err => res.status(404).json({norequestfound: 'No request found with that id'}))
+    }
+);
+
 
 module.exports = router;
