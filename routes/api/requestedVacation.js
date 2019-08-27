@@ -9,8 +9,27 @@ const validateRequestedVacationInput = require('../../validators/requestedVacati
 const RequestedVacation = require('../../models/requestedVacations');
 const User = require('../../models/user');
 
-//@route        POST api/request
-//@description  Request a vacation
+//@route        GET api/request/all
+//@description  Minden kérést lekér
+//@access       Private
+router.get('/all',
+    passport.authenticate('jwt', {session: false}),
+    (req, res) => {
+        RequestedVacation
+            .find()
+            .sort({date: -1})
+            .then(requests => res.json(requests))
+            .catch(err => res.status(404).json({norequestsfound: 'No requests found'})
+            );
+    }
+);
+
+//
+//DOLGOZÓ MŰVELETEK
+//
+
+//@route        POST api/user/request
+//@description  A dolgozó kérvényez
 //@access       Private
 router.post('/', passport.authenticate('jwt', {session: false}),
     (req, res) => {
@@ -31,29 +50,14 @@ router.post('/', passport.authenticate('jwt', {session: false}),
                 .then(request => res.json(request))
                 .catch(err => console.log(err));
         }
-
     }
 );
 
-//@route        GET api/request/all
-//@description  Get all request
-//@access       Private
-router.get('/all',
-    passport.authenticate('jwt', {session: false}),
-    (req, res) => {
-        RequestedVacation
-            .find()
-            .sort({date: -1})
-            .then(requests => res.json(requests))
-            .catch(err => res.status(404).json({norequestsfound: 'No requests found'})
-            );
-    }
-);
 
-//@route        GET api/request/:id
-//@description  Get request by id
+//@route        GET api/request/user/:id
+//@description  A dolgozó saját kéréseit lekéri
 //@access       Private
-router.get('/:id',
+router.get('/user/:id',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
         RequestedVacation
@@ -63,20 +67,62 @@ router.get('/:id',
     }
 );
 
-//@route        DELETE api/request/:id
-//@description  Delete request by id
+//@route        DELETE api/request/user/:id
+//@description  A dolgozó törli egy kérését id alapján
 //@access       Private
-router.delete('/:id',
+router.delete('/user/:id',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
         RequestedVacation
-        //.findById(req.params.id)
-        //.remove()
             .deleteOne({_id: req.params.id})
             .then(res.json({succes: true}))
             .catch(err => res.status(404).json({norequestfound: 'No request found with that id'}))
     }
 );
 
+//@route        PUT api/request/user/:id
+//@description  A dolgozó módosítja egy kérését id alapján
+//@access       Private
+router.put('/user/:id',
+    passport.authenticate('jwt', {session: false}),
+    (req, res) => {
+        const requestFields = {};
+
+        requestFields.start_date = req.body.start_date;
+        requestFields.end_date = req.body.end_date;
+        requestFields.description = req.body.description;
+
+        RequestedVacation
+            .findOneAndUpdate(
+                {_id: req.params.id},
+                {$set: requestFields},
+                {new: true}
+            )
+            .then(request => res.json(request))
+            .catch(err => res.json(err))
+    }
+);
+
+//
+//ADMIN MŰVELETEK
+//
+
+//@route        PUT api/request/admin/:id
+//@description  Az admin elbírálja az adott id-vel rendelkező kérést
+//@access       Private
+router.put('/admin/:id',
+    passport.authenticate('jwt', {session: false}),
+    (req, res) => {
+        const newState = req.body.state;
+        RequestedVacation
+            .findOneAndUpdate(
+                {_id: req.params.id},
+                {$set: newState},
+                {new: true}
+            )
+            .then(res.json({succes: true}))
+            .catch(err => res.json(err))
+    }
+);
 
 module.exports = router;
