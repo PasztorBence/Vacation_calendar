@@ -3,11 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 
 //Load validations
-const validateRequestedVacationInput = require('../../validators/requestedVacation');
+const validateRequestedVacationInput = require('../../validators/datePairValidation');
 
 //Load model
 const RequestedVacation = require('../../models/requestedVacations');
-const User = require('../../models/user');
 
 //@route        GET api/request/all
 //@description  Minden kérést lekér
@@ -28,10 +27,10 @@ router.get('/all',
 //DOLGOZÓ MŰVELETEK
 //
 
-//@route        POST api/user/request
+//@route        POST api/request/user
 //@description  A dolgozó kérvényez
 //@access       Private
-router.post('/', passport.authenticate('jwt', {session: false}),
+router.post('/user', passport.authenticate('jwt', {session: false}),
     (req, res) => {
         const {errors, isValid} = validateRequestedVacationInput(req.body);
         //Check validation

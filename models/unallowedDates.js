@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Create Schema
-const UnallowedVacationSchema = new Schema({
+const UnallowedDateSchema = new Schema({
     start_date: {
         type: Date,
         required: true
@@ -19,4 +19,4 @@ const UnallowedVacationSchema = new Schema({
     timestamps: true
 });
 
-module.exports = requestedVacations = mongoose.model('requestedVacation', UnallowedVacationSchema);
+module.exports = unallowedDate = mongoose.model('unallowedDate', UnallowedDateSchema);

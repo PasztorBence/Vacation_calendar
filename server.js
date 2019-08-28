@@ -5,6 +5,7 @@ const passport = require('passport');
 
 const users = require('./routes/api/users');
 const requestedVacation = require('./routes/api/requestedVacation');
+const unallowedDate = require('./routes/api/unallowedDate');
 
 const app = express();
 
@@ -30,6 +31,7 @@ require('./config/passport')(passport);
 //use routes
 app.use('/api/users', users);
 app.use('/api/request', requestedVacation);
+app.use('/api/unallow', unallowedDate);
 
 const port = process.env.PORT || 4000;
 
