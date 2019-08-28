@@ -2,3 +2,4 @@
 /config
 package-lock.json
 .idea
+/client/node_modules

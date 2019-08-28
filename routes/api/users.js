@@ -13,7 +13,7 @@ const validateLoginInput = require('../../validators/login');
 const User = require('../../models/user');
 
 //@route        POST api/users/register
-//@description  Register user
+//@description  Felhasználó regisztrálás
 //@access       Public
 router.post('/register', (req, res) => {
     const {errors, isValid} = validateRegisterInput(req.body);
@@ -100,9 +100,10 @@ router.post('/login', (req, res) => {
 });
 
 //@route        GET api/users/current
-//@description  Return current user
+//@description  A bejelentkezett felhasználót adja vissza
 //@access       Private
-router.get('/current', passport.authenticate('jwt', {session: false}),
+router.get('/current',
+    passport.authenticate('jwt', {session: false}),
     (req, res) => {
         res.json({
             id: req.user.id,
@@ -114,9 +115,10 @@ router.get('/current', passport.authenticate('jwt', {session: false}),
     });
 
 //@route        GET api/users/all
-//@description  Return all user
+//@description  Minden felhasználót kilistáz
 //@access       Private
-router.get('/all', passport.authenticate('jwt', {session: false}),
+router.get('/all',
+    passport.authenticate('jwt', {session: false}),
     (req, res) => {
         User.find()
             .then(users => {
@@ -130,5 +132,24 @@ router.get('/all', passport.authenticate('jwt', {session: false}),
                 res.status(404).json({profile: 'There are no profiles'})
             })
     });
+
+//@route        PUT api/users/admin/:id
+//@description  Hátralévő napok módosítása adott felhasználónak
+//@access       Private
+router.put('/admin/:id',
+    passport.authenticate('jwt', {session: false}),
+    (req, res) => {
+        const newRemainingDays = {};
+        newRemainingDays.remaining_days = req.body.remaining_days;
+        User
+            .findOneAndUpdate(
+                {_id: req.params.id},
+                {$set: newRemainingDays},
+                {new: true}
+            )
+            .then(res.json({succes: true}))
+            .catch(err => res.json(err))
+    }
+);
 
 module.exports = router;

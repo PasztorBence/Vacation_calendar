@@ -40,11 +40,12 @@ router.put('/admin/:id',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
         const {errors, isValid} = validateUnallowedDateInput(req.body);
-        const unallowedFields = {};
         if (!isValid) {
             //return any errors with 400 status
             return res.status(400).json(errors);
         } else {
+            const unallowedFields = {};
+
             unallowedFields.start_date = req.body.start_date;
             unallowedFields.end_date = req.body.end_date;
             unallowedFields.description = req.body.description;
