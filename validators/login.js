@@ -9,13 +9,13 @@ module.exports = function validateLoginInput(data) {
 
 
     if (!Validator.isEmail(data.email)) {
-        errors.email = 'Email is invalid';
+        errors.email = 'Érvénytelen E-mail!';
     }
     if (Validator.isEmpty(data.email)) {
-        errors.email = 'Email is required';
+        errors.email = 'E-mail megadása kötelező!';
     }
     if (Validator.isEmpty(data.password)) {
-        errors.password = 'Password is required';
+        errors.password = 'Jelszó megadása kötelező!';
     }
 
     return {

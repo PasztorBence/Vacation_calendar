@@ -10,28 +10,28 @@ module.exports = function validateRegisterInput(data) {
     data.password2 = !isEmpty(data.password2) ? data.password2 : '';
 
     if (!Validator.isLength(data.name, {min: 2, max: 30})) {
-        errors.name = 'Name must be between 2 and 30 characters!'
+        errors.name = 'A név 2 és 30 karakter között legyen!'
     }
     if (Validator.isEmpty(data.name)) {
-        errors.name = 'Name is required';
+        errors.name = 'Név megadása kötelező!';
     }
     if (Validator.isEmpty(data.email)) {
-        errors.email = 'Email is required';
+        errors.email = 'E-mail cím megadása kötelező!';
     }
     if (!Validator.isEmail(data.email)) {
-        errors.email = 'Email is invalid';
+        errors.email = 'Érvénytelen E-mail!';
     }
     if (Validator.isEmpty(data.password)) {
-        errors.password = 'Password is required';
+        errors.password = 'Jelszó megadása kötelező!';
     }
     if (!Validator.isLength(data.password, {min: 6, max: 30})) {
-        errors.password = 'Password must be between 6 and 30 Characters';
+        errors.password = 'A jelszó 6 és 30 karakter között legyen!';
     }
     if (Validator.isEmpty(data.password2)) {
-        errors.password2 = 'Confirm Password field is required';
+        errors.password2 = 'Jelszó megerősítése kötelező!';
     }
     if (!Validator.equals(data.password, data.password2)) {
-        errors.password = 'Passwords must match';
+        errors.password = 'A jelszavaknak egyezniük kell!';
     }
 
     return {

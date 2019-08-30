@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import classnames from 'classnames';
 
@@ -18,7 +18,7 @@ class Register extends Component {
     }
 
     onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
+        this.setState({[e.target.name]: e.target.value});
     }
 
     onSubmit(e) {
@@ -34,11 +34,11 @@ class Register extends Component {
         axios
             .post('/api/users/register', newUser)
             .then(res => console.log(res.data))
-            .catch(err => this.setState({ errors: err.response.data }));
+            .catch(err => this.setState({errors: err.response.data}));
     }
 
     render() {
-        const { errors } = this.state;
+        const {errors} = this.state;
 
         return (
             <div className="register">
@@ -107,7 +107,7 @@ class Register extends Component {
                                         <div className="invalid-feedback">{errors.password2}</div>
                                     )}
                                 </div>
-                                <input type="submit" className="btn btn-info btn-block mt-4" />
+                                <input type="submit" className="btn btn-info btn-block mt-4"/>
                             </form>
                         </div>
                     </div>

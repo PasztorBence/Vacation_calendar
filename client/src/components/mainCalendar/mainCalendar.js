@@ -13,10 +13,10 @@ class MainCalendar extends Component {
                           contentHeight={"auto"}
                           height={"auto"}
                           events={[
-                              { // this object will be "parsed" into an Event Object
-                                  title: 'The Title', // a property!
-                                  start: '2019-08-01', // a property!
-                                  end: '2019-08-06' // a property! ** see important note below about 'end' **
+                              {
+                                  title: 'The Title',
+                                  start: '2019-08-01',
+                                  end: '2019-08-06'
                               }
                           ]}
             />

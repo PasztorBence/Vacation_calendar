@@ -4,7 +4,7 @@ class Navbar extends Component {
     render() {
         return (
             <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-2">
-                <div className="container">
+                <div className="container-fluid">
                     <a className="navbar-brand" href="/main">
                         Naptár
                     </a>
@@ -21,20 +21,25 @@ class Navbar extends Component {
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
                                 <a className="nav-link" href="/user">
-                                    User
+                                    Szabadság
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/admin">
+                                    Admin
                                 </a>
                             </li>
                         </ul>
 
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <a className="nav-link" href="/register">
-                                    Regisztrálás
+                                <a className="nav-link" href="/login">
+                                    Bejelentkezés
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/login">
-                                    Bejelentkezés
+                                <a className="nav-link" href="/register">
+                                    Regisztrálás
                                 </a>
                             </li>
                         </ul>
