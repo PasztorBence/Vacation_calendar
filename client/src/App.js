@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from "react-router-dom";
-//import {Provider} from 'react-redux';
+import {Provider} from 'react-redux';
+import store from "./store";
 //import jwt_decode from 'jwt-decode';
 
 //TODO imports
@@ -17,16 +18,18 @@ import '@fullcalendar/daygrid/main.css';
 
 function App() {
     return (
-        <Router>
-            <div className="App">
-                <Navbar/>
-                <Route exact path="/main" component={MainCalendar}/>
-                <Route exact path="/register" component={Register}/>
-                <Route exact path="/login" component={Login}/>
-                <Route exact path="/user" component={UserTable}/>
-                <Route exact path="/admin" component={AdminTable}/>
-            </div>
-        </Router>
+        <Provider store={store}>
+            <Router>
+                <div className="App">
+                    <Navbar/>
+                    <Route exact path="/main" component={MainCalendar}/>
+                    <Route exact path="/register" component={Register}/>
+                    <Route exact path="/login" component={Login}/>
+                    <Route exact path="/user" component={UserTable}/>
+                    <Route exact path="/admin" component={AdminTable}/>
+                </div>
+            </Router>
+        </Provider>
     );
 }
 
