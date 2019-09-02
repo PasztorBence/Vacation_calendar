@@ -1,7 +1,54 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {logoutUser} from "../../actions/authActions";
 
 class Navbar extends Component {
+
+    onLogoutClick(e){
+     e.preventDefault();
+     this.props.logoutUser();
+    }
+
     render() {
+        const {isAuthenticated, user} = this.props.auth;
+
+        const authLinks = (
+            <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                    <a className="nav-link"
+                       href="/login"
+                    >
+                        Bejelentkezés
+                    </a>
+                </li>
+                <li className="nav-item">
+                    <a className="nav-link"
+                       href="/register"
+                    >
+                        Regisztrálás
+                    </a>
+                </li>
+            </ul>
+        );
+
+        const loggedInLinks = (
+            <ul className="navbar-nav ml-auto">
+                <li className='nav-item'>
+                    <h6 className="navbar-text">Username</h6>
+                </li>
+                <li className="nav-item">
+                    <a href="#"
+                       className="nav-link"
+                       onClick={this.onLogoutClick.bind(this)}
+                    >
+                    Logout
+                    </a>
+                </li>
+            </ul>
+        );
+
         return (
             <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-2">
                 <div className="container-fluid">
@@ -30,19 +77,8 @@ class Navbar extends Component {
                                 </a>
                             </li>
                         </ul>
+                        {isAuthenticated ? loggedInLinks : authLinks}
 
-                        <ul className="navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <a className="nav-link" href="/login">
-                                    Bejelentkezés
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/register">
-                                    Regisztrálás
-                                </a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </nav>
@@ -50,4 +86,13 @@ class Navbar extends Component {
     }
 }
 
-export default Navbar;
+Navbar.propTypes = {
+    logoutUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, {logoutUser})(Navbar);

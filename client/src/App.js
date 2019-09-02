@@ -1,5 +1,8 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from "react-router-dom";
+import jwt_decode from 'jwt-decode';
+import setAuthToken from "./utils/setAuthToken";
+import {setCurrentUser} from "./actions/authActions";
 import {Provider} from 'react-redux';
 import store from "./store";
 
@@ -13,6 +16,16 @@ import AdminTable from "./components/admin/adminTable";
 import './App.css';
 import '@fullcalendar/core/main.css';
 import '@fullcalendar/daygrid/main.css';
+
+//Check for token
+if (localStorage.jwtToken){
+    //Set the auth token header auth
+    setAuthToken(localStorage.jwtToken);
+    //Decode token and get user info and exp
+    const decoded = jwt_decode(localStorage.jwtToken);
+    //Set user and isAuthenticated
+    store.dispatch(setCurrentUser(decoded));
+}
 
 function App() {
     return (
