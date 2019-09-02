@@ -2,9 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import {Provider} from 'react-redux';
 import store from "./store";
-//import jwt_decode from 'jwt-decode';
 
-//TODO imports
 import Navbar from "./components/layout/navbar";
 import MainCalendar from "./components/mainCalendar/mainCalendar";
 import Register from "./components/auth/register";
