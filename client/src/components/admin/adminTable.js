@@ -1,7 +1,25 @@
 import React, {Component} from 'react';
 import AdminTableItem from "./adminTableItem";
+import {PropTypes} from 'prop-types';
+import {connect} from 'react-redux';
 
 class AdminTable extends Component {
+
+    componentDidMount() {
+        if (!this.props.auth.isAuthenticated) {
+            this.props.history.push('/login');
+        }
+        if (!(this.props.auth.user.user_level === "admin")) {
+            this.props.history.push('/main');
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!this.props.auth.isAuthenticated) {
+            this.props.history.push('/login');
+        }
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -37,4 +55,12 @@ class AdminTable extends Component {
     }
 }
 
-export default AdminTable;
+AdminTable.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(AdminTable);

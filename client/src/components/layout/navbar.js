@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {logoutUser} from "../../actions/authActions";
 
 class Navbar extends Component {
 
-    onLogoutClick(e){
-     e.preventDefault();
-     this.props.logoutUser();
+    onLogoutClick(e) {
+        e.preventDefault();
+        this.props.logoutUser();
     }
 
     render() {
@@ -35,53 +34,49 @@ class Navbar extends Component {
 
         const loggedInLinks = (
             <ul className="navbar-nav ml-auto">
-                <li className='nav-item'>
-                    <h6 className="navbar-text">Username</h6>
-                </li>
                 <li className="nav-item">
-                    <a href="#"
+                    <a href="/login"
                        className="nav-link"
                        onClick={this.onLogoutClick.bind(this)}
                     >
-                    Logout
+                        Logout
                     </a>
                 </li>
             </ul>
         );
 
         return (
-            <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-2">
-                <div className="container-fluid">
-                    <a className="navbar-brand" href="/main">
-                        Naptár
-                    </a>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#mobile-nav"
-                    >
-                        <span className="navbar-toggler-icon"/>
-                    </button>
-
-                    <div className="collapse navbar-collapse" id="mobile-nav">
-                        <ul className="navbar-nav mr-auto">
-                            <li className="nav-item">
-                                <a className="nav-link" href="/user">
-                                    Szabadság
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/admin">
-                                    Admin
-                                </a>
-                            </li>
-                        </ul>
-                        {isAuthenticated ? loggedInLinks : authLinks}
-
+            <div>
+                <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-2">
+                    <div className="container-fluid">
+                        <a className="navbar-brand" href="/main">
+                            Naptár
+                        </a>
+                        {isAuthenticated ? <h className="navbar-brand">{user.name}</h> : ''}
+                        <button
+                            className="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#mobile-nav"
+                        >
+                            <span className="navbar-toggler-icon"/>
+                        </button>
+                        <div className="collapse navbar-collapse" id="mobile-nav">
+                            <ul className="navbar-nav mr-auto">
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/user">
+                                        Szabadság
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    {user.user_level === 'admin' ? <a className="nav-link" href="/admin">Admin</a> : ''}
+                                </li>
+                            </ul>
+                            {isAuthenticated ? loggedInLinks : authLinks}
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </div>
         )
     }
 }

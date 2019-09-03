@@ -2,8 +2,23 @@ import React, {Component} from 'react';
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
+import {PropTypes} from 'prop-types';
+import {connect} from 'react-redux';
 
 class MainCalendar extends Component {
+
+    componentDidMount() {
+        if (!this.props.auth.isAuthenticated) {
+            this.props.history.push('/login');
+        }
+    }
+    
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!this.props.auth.isAuthenticated) {
+            this.props.history.push('/login');
+        }
+    }
+
     render() {
         return (
             <FullCalendar defaultView="dayGridMonth"
@@ -24,4 +39,12 @@ class MainCalendar extends Component {
     }
 }
 
-export default MainCalendar;
+MainCalendar.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(MainCalendar);

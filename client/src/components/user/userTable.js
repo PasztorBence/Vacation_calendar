@@ -1,7 +1,22 @@
 import React, {Component} from 'react';
 import UserTableItem from "./userTableItem";
+import {PropTypes} from 'prop-types';
+import {connect} from 'react-redux';
 
 class UserTable extends Component {
+
+    componentDidMount() {
+        if (!this.props.auth.isAuthenticated) {
+            this.props.history.push('/login');
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!this.props.auth.isAuthenticated) {
+            this.props.history.push('/login');
+        }
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -36,4 +51,12 @@ class UserTable extends Component {
     }
 }
 
-export default UserTable;
+UserTable.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(UserTable);

@@ -20,7 +20,13 @@ class Register extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push('/main');
+        }
+    }
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.errors) {
             this.setState({errors: nextProps.errors});
         }
@@ -39,7 +45,7 @@ class Register extends Component {
             password: this.state.password,
             password2: this.state.password2
         };
-        this.props.registerUser(newUser,this.props.history)
+        this.props.registerUser(newUser, this.props.history)
     }
 
     render() {
