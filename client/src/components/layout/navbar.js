@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {logoutUser} from "../../actions/authActions";
+import {clearCurrentProfile} from "../../actions/profileActions";
 
 class Navbar extends Component {
 
     onLogoutClick(e) {
         e.preventDefault();
+        this.props.clearCurrentProfile();
         this.props.logoutUser();
     }
 
@@ -52,7 +54,7 @@ class Navbar extends Component {
                         <a className="navbar-brand" href="/main">
                             Naptár
                         </a>
-                        {isAuthenticated ? <h className="navbar-brand">{user.name}</h> : ''}
+                        {isAuthenticated ? <div className="navbar-brand">{user.name}</div> : ''}
                         <button
                             className="navbar-toggler"
                             type="button"
@@ -90,4 +92,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {logoutUser})(Navbar);
+export default connect(mapStateToProps, {logoutUser, clearCurrentProfile})(Navbar);

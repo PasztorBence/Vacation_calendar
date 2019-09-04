@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
+import isEmpty from "../../validation/is-empty";
 
 class UserTableItem extends Component {
     render() {
+        const {profile} = this.props;
+
         return (
             <tr>
                 <td>2019.01.01</td>
@@ -15,7 +18,7 @@ class UserTableItem extends Component {
                                 data-toggle="modal"
                                 data-target="#edit"
                         >
-                            <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                           Módosítás
                         </button>
                     </p>
                 </td>
@@ -28,7 +31,7 @@ class UserTableItem extends Component {
                                 data-toggle="modal"
                                 data-target="#delete"
                         >
-                            <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            Törlés
                         </button>
                     </p>
                 </td>

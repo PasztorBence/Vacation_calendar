@@ -60,7 +60,7 @@ router.get('/user/:id',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
         RequestedVacation
-            .findById(req.params.id)
+            .find({user: req.params.id})
             .then(post => res.json(post))
             .catch(err => res.status(404).json({norequestfound: 'No request found with that id'}))
     }

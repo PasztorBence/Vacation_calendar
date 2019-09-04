@@ -12,7 +12,7 @@ class MainCalendar extends Component {
             this.props.history.push('/login');
         }
     }
-    
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
@@ -31,6 +31,16 @@ class MainCalendar extends Component {
                               {
                                   title: 'The Title',
                                   start: '2019-08-01',
+                                  end: '2019-08-06'
+                              },
+                              {
+                                  title: 'The Title',
+                                  start: '2019-08-01',
+                                  end: '2019-08-06'
+                              },
+                              {
+                                  title: 'The Title',
+                                  start: '2019-08-02',
                                   end: '2019-08-06'
                               }
                           ]}

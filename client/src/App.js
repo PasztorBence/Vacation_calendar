@@ -3,16 +3,17 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 import jwt_decode from 'jwt-decode';
 import setAuthToken from "./utils/setAuthToken";
 import {logoutUser, setCurrentUser} from "./actions/authActions";
+import {clearCurrentProfile} from "./actions/profileActions";
 import {Provider} from 'react-redux';
 import store from "./store";
-
+//Component imports
 import Navbar from "./components/layout/navbar";
 import MainCalendar from "./components/mainCalendar/mainCalendar";
 import Register from "./components/auth/register";
 import Login from "./components/auth/login";
 import UserTable from "./components/user/userTable";
 import AdminTable from "./components/admin/adminTable";
-
+//Css imports
 import './App.css';
 import '@fullcalendar/core/main.css';
 import '@fullcalendar/daygrid/main.css';
@@ -30,7 +31,8 @@ if (localStorage.jwtToken) {
     if (decoded.exp < currentTime) {
         //Logout user
         store.dispatch(logoutUser());
-        //TODO: CLear current profile
+        //Clear current profile
+        store.dispatch(clearCurrentProfile());
         //Redirect to Login
         window.location.href = '/login'
     }
