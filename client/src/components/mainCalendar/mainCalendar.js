@@ -4,10 +4,13 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
+import {getRequests} from "../../actions/profileActions";
 
 class MainCalendar extends Component {
 
     componentDidMount() {
+        const id = this.props.auth.user.id;
+        this.props.getRequests(id);
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
@@ -20,6 +23,7 @@ class MainCalendar extends Component {
     }
 
     render() {
+        const {requests} = this.props.profile;
         return (
             <FullCalendar defaultView="dayGridMonth"
                           plugins={[dayGridPlugin, interactionPlugin]}
@@ -50,11 +54,14 @@ class MainCalendar extends Component {
 }
 
 MainCalendar.propTypes = {
-    auth: PropTypes.object.isRequired
+    getRequests: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.auth,
+    profile: state.profile
 });
 
-export default connect(mapStateToProps)(MainCalendar);
+export default connect(mapStateToProps, {getRequests})(MainCalendar);

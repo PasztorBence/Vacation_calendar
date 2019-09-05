@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import UserTableItem from "./userTableItem";
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
+import Moment from 'react-moment';
 import {getCurrentProfile, getRequests} from "../../actions/profileActions";
 
 class UserTable extends Component {
@@ -22,14 +22,50 @@ class UserTable extends Component {
     }
 
     render() {
-        const {profile, loading} = this.props.profile;
+        const {profile, loading, requests} = this.props.profile;
 
         let tableContent;
-
+        let tableItems;
+        if (!(requests === null)) {
+            console.log(requests);
+            tableItems = requests.map(request => (
+                    <tr key={request._id}>
+                        <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
+                        <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
+                        <td>{request.description}</td>
+                        <td>{request.state}</td>
+                        <td>
+                            <p data-placement="top" data-toggle="tooltip" title="Edit">
+                                <button className="btn btn-primary btn-xs"
+                                        data-title="Edit"
+                                        data-toggle="modal"
+                                        data-target="#edit"
+                                >
+                                    Módosítás
+                                </button>
+                            </p>
+                        </td>
+                        <td>
+                            <p data-placement="top"
+                               data-toggle="tooltip"
+                               title="Delete">
+                                <button className="btn btn-danger btn-xs"
+                                        data-title="Delete"
+                                        data-toggle="modal"
+                                        data-target="#delete"
+                                >
+                                    Törlés
+                                </button>
+                            </p>
+                        </td>
+                    </tr>
+                )
+            );
+        }
         if (profile === null || loading) {
             tableContent = <h4>Betöltés...</h4>
         } else {
-            tableContent =
+            tableContent = (
                 <div className="table-responsive">
                     <table id="mytable" className="table table-bordred table-striped">
                         <thead>
@@ -43,17 +79,13 @@ class UserTable extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        <UserTableItem/>
-                        <UserTableItem/>
-                        <UserTableItem/>
-                        <UserTableItem/>
-                        <UserTableItem/>
-                        <UserTableItem/>
-                        <UserTableItem/>
+                        {tableItems}
                         </tbody>
                     </table>
                 </div>
+            );
         }
+
 
         return (
             <div className="container-fluid">
