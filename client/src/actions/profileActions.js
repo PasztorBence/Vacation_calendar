@@ -69,3 +69,21 @@ export const createRequest = (newData, history) => dispatch => {
             })
         )
 };
+
+//Delete a request from the list
+export const deleteRequest = (id, history) => dispatch => {
+    axios.delete(`api/request/user/${id}`)
+        .then(res =>
+                dispatch({
+                    type: GET_REQUESTS,
+                    payload: res.data
+                }),
+            history.push('/main'),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_REQUESTS,
+                payload: null
+            })
+        )
+};

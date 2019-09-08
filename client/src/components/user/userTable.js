@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import Moment from 'react-moment';
-import {getCurrentProfile, getRequests} from "../../actions/profileActions";
+import {getCurrentProfile, getRequests, deleteRequest} from "../../actions/profileActions";
 
 class UserTable extends Component {
 
@@ -19,6 +19,10 @@ class UserTable extends Component {
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
+    }
+
+    deleteOnClick(id) {
+        this.props.deleteRequest(id,this.props.history);
     }
 
     render() {
@@ -49,7 +53,8 @@ class UserTable extends Component {
                             <p data-placement="top"
                                data-toggle="tooltip"
                                title="Delete">
-                                <button className="btn btn-danger btn-xs"
+                                <button onClick={this.deleteOnClick.bind(this, request._id)}
+                                        className="btn btn-danger btn-xs"
                                         data-title="Delete"
                                         data-toggle="modal"
                                         data-target="#delete"
@@ -104,6 +109,7 @@ class UserTable extends Component {
 UserTable.propTypes = {
     getCurrentProfile: PropTypes.func.isRequired,
     getRequests: PropTypes.func.isRequired,
+    deleteRequest: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired
 };
@@ -113,4 +119,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getCurrentProfile, getRequests})(UserTable);
+export default connect(mapStateToProps, {getCurrentProfile, getRequests, deleteRequest})(UserTable);

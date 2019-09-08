@@ -61,7 +61,7 @@ class NewRequest extends Component {
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
                                     <input
-                                        type="string"
+                                        type="date"
                                         className={classnames('form-control form-control-lg', {
                                             //'is-invalid': errors.start_date
                                         })}
@@ -74,7 +74,7 @@ class NewRequest extends Component {
                                 </div>
                                 <div className="form-group">
                                     <input
-                                        type="string"
+                                        type="date"
                                         className={classnames('form-control form-control-lg', {
                                             //'is-invalid': errors.start_date
                                         })}
