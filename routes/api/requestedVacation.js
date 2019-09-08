@@ -30,7 +30,8 @@ router.get('/all',
 //@route        POST api/request/user
 //@description  A dolgozó kérvényez
 //@access       Private
-router.post('/user', passport.authenticate('jwt', {session: false}),
+router.post('/user',
+    passport.authenticate('jwt', {session: false}),
     (req, res) => {
         const {errors, isValid} = validateRequestedVacationInput(req.body);
         //Check validation

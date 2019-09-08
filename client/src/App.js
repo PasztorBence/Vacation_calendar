@@ -13,6 +13,7 @@ import Register from "./components/auth/register";
 import Login from "./components/auth/login";
 import UserTable from "./components/user/userTable";
 import AdminTable from "./components/admin/adminTable";
+import NewRequest from "./components/user/newRequest";
 //Css imports
 import './App.css';
 import '@fullcalendar/core/main.css';
@@ -49,6 +50,7 @@ function App() {
                     <Route exact path="/login" component={Login}/>
                     <Route exact path="/user" component={UserTable}/>
                     <Route exact path="/admin" component={AdminTable}/>
+                    <Route exact path ="/newrequest" component={NewRequest}/>
                 </div>
             </Router>
         </Provider>

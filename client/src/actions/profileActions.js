@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_REQUESTS} from "./types";
+import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_REQUESTS, GET_ERRORS} from "./types";
 
 //Get current profile
 export const getCurrentProfile = () => dispatch => {
@@ -50,4 +50,22 @@ export const getRequests = id => dispatch => {
                 payload: null
             })
         );
+};
+
+//Create a new request
+export const createRequest = (newData, history) => dispatch => {
+    axios.post('api/request/user/', newData)
+        .then(res =>
+                dispatch({
+                    type: GET_REQUESTS,
+                    payload: res.data
+                }),
+            history.push('/login'),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_REQUESTS,
+                payload: null
+            })
+        )
 };
