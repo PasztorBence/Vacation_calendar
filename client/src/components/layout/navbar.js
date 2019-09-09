@@ -41,7 +41,7 @@ class Navbar extends Component {
                        className="nav-link"
                        onClick={this.onLogoutClick.bind(this)}
                     >
-                        Logout
+                        Kijelentkezés
                     </a>
                 </li>
             </ul>

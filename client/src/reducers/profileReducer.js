@@ -1,8 +1,9 @@
-import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_REQUESTS} from "../actions/types";
+import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_REQUESTS,GET_ALL_REQUESTS} from "../actions/types";
 
 const initialState = {
     profile: null,
     requests: null,
+    allRequests: null,
     loading: false
 };
 
@@ -24,6 +25,12 @@ export default function (state = initialState, action) {
                 ...state,
                 requests: action.payload,
                 loading: false
+            };
+        case GET_ALL_REQUESTS:
+            return {
+              ...state,
+              allRequests: action.payload,
+              loading: false
             };
         case CLEAR_CURRENT_PROFILE:
             return {

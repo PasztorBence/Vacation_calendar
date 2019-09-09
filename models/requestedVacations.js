@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 //Create Schema
 const RequestedVacationSchema = new Schema({
     user: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
     start_date: {
@@ -17,7 +17,7 @@ const RequestedVacationSchema = new Schema({
     },
     state: {
         type: String,
-        default: 'pending'
+        default: 'Függőben'
     },
     description: {
         type: String

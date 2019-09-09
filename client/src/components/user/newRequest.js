@@ -70,7 +70,6 @@ class NewRequest extends Component {
                                         value={this.state.start_date}
                                         onChange={this.onChange}
                                     />
-                                    <div className="invalid-feedback">//TODO errors</div>
                                 </div>
                                 <div className="form-group">
                                     <input
@@ -83,7 +82,6 @@ class NewRequest extends Component {
                                         value={this.state.end_date}
                                         onChange={this.onChange}
                                     />
-                                    <div className="invalid-feedback">//TODO errors</div>
                                 </div>
                                 <div className="form-group">
                                     <input
@@ -96,7 +94,6 @@ class NewRequest extends Component {
                                         value={this.state.description}
                                         onChange={this.onChange}
                                     />
-                                    <div className="invalid-feedback">//Todo errors</div>
                                 </div>
                                 <input type="submit" className="btn btn-info btn-block mt-4"/>
                             </form>

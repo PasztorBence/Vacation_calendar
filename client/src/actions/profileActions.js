@@ -1,10 +1,11 @@
 import axios from 'axios';
-import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_REQUESTS, GET_ERRORS} from "./types";
+import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_REQUESTS, GET_ALL_REQUESTS} from "./types";
 
 //Get current profile
 export const getCurrentProfile = () => dispatch => {
     dispatch(setProfileLoading());
-    axios.get('/api/users/current')
+    axios
+        .get('/api/users/current')
         .then(res =>
             dispatch({
                 type: GET_PROFILE,
@@ -54,7 +55,8 @@ export const getRequests = id => dispatch => {
 
 //Create a new request
 export const createRequest = (newData, history) => dispatch => {
-    axios.post('api/request/user/', newData)
+    axios
+        .post('api/request/user/', newData)
         .then(res =>
                 dispatch({
                     type: GET_REQUESTS,
@@ -72,7 +74,8 @@ export const createRequest = (newData, history) => dispatch => {
 
 //Delete a request from the list
 export const deleteRequest = (id, history) => dispatch => {
-    axios.delete(`api/request/user/${id}`)
+    axios
+        .delete(`api/request/user/${id}`)
         .then(res =>
                 dispatch({
                     type: GET_REQUESTS,
@@ -83,6 +86,43 @@ export const deleteRequest = (id, history) => dispatch => {
         .catch(err =>
             dispatch({
                 type: GET_REQUESTS,
+                payload: null
+            })
+        )
+};
+
+//Get all request from all user
+export const getAllRequest = () => dispatch => {
+    axios
+        .get('api/request/all')
+        .then(res =>
+            dispatch({
+                type: GET_ALL_REQUESTS,
+                payload: res.data
+            }),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ALL_REQUESTS,
+                payload: null
+            })
+        )
+};
+
+//Change the state of a request
+export const changeRequestState = (id, newState,history) => dispatch => {
+    axios
+        .put(`api/request/admin/${id}`,newState)
+        .then(res =>
+            dispatch({
+                type: GET_ALL_REQUESTS,
+                payload: res.data
+            }),
+            window.location.reload()
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ALL_REQUESTS,
                 payload: null
             })
         )

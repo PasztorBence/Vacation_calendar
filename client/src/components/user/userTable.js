@@ -8,8 +8,7 @@ class UserTable extends Component {
 
     componentDidMount() {
         this.props.getCurrentProfile();
-        const id = this.props.auth.user.id;
-        this.props.getRequests(id);
+        this.props.getRequests(this.props.auth.user.id);
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
@@ -22,33 +21,21 @@ class UserTable extends Component {
     }
 
     deleteOnClick(id) {
-        this.props.deleteRequest(id,this.props.history);
+        this.props.deleteRequest(id, this.props.history);
     }
 
     render() {
-        const {profile, loading, requests} = this.props.profile;
+        const {profile,loading,requests} = this.props.profile;
 
         let tableContent;
         let tableItems;
         if (!(requests === null)) {
-            console.log(requests);
             tableItems = requests.map(request => (
                     <tr key={request._id}>
                         <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
                         <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
                         <td>{request.description}</td>
                         <td>{request.state}</td>
-                        <td>
-                            <p data-placement="top" data-toggle="tooltip" title="Edit">
-                                <button className="btn btn-primary btn-xs"
-                                        data-title="Edit"
-                                        data-toggle="modal"
-                                        data-target="#edit"
-                                >
-                                    Módosítás
-                                </button>
-                            </p>
-                        </td>
                         <td>
                             <p data-placement="top"
                                data-toggle="tooltip"
@@ -79,7 +66,6 @@ class UserTable extends Component {
                             <th>Eddig</th>
                             <th>Leírás</th>
                             <th>Állapot</th>
-                            <th>Módosítás</th>
                             <th>Törlés</th>
                         </tr>
                         </thead>

@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import AdminTableItem from "./adminTableItem";
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
+import {getAllRequest, changeRequestState} from "../../actions/profileActions";
+import Moment from "react-moment";
 
 class AdminTable extends Component {
 
     componentDidMount() {
+        this.props.getAllRequest();
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
@@ -20,35 +22,86 @@ class AdminTable extends Component {
         }
     }
 
+    acceptOnClick(id) {
+        const newState = {state: 'Elfogadva'};
+        this.props.changeRequestState(id, newState,this.props.history)
+    }
+
+    declineOnClick(id){
+        const newState = {state: 'Elutasítva'};
+        this.props.changeRequestState(id,newState,this.props.history);
+    }
+
     render() {
+        const {loading, allRequests} = this.props.profile;
+        let tableContent;
+        let tableItems;
+
+        if (!(allRequests === null)) {
+            tableItems = allRequests.map(request => (
+                    <tr key={request._id}>
+                        <td>{request.user.name}</td>
+                        <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
+                        <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
+                        <td>{request.description}</td>
+                        <td><Moment format={"YYYY.MM.DD"}>{request.createdAt}</Moment></td>
+                        <td>{request.state}</td>
+                        <td>
+                            <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={this.acceptOnClick.bind(this,request._id)}
+                            >
+                                Elfogad
+                            </button>
+                        </td>
+                        <td>
+                            <button
+                                type="button"
+                                className="btn btn-danger"
+                                onClick={this.declineOnClick.bind(this,request._id)}
+                            >
+                                Elutasít
+                            </button>
+                        </td>
+                    </tr>
+                )
+            )
+        }
+
+        if (allRequests === null || loading) {
+            tableContent = <h4>Betöltés...</h4>
+        } else {
+            tableContent = (
+                <div className="table-responsive">
+                    <table id="mytable" className="table table-bordred table-striped">
+                        <thead>
+                        <tr>
+                            <th>Név</th>
+                            <th>Ettől</th>
+                            <th>Eddig</th>
+                            <th>Leírás</th>
+                            <th>Ekkor kérte</th>
+                            <th>Állapot</th>
+                            <th>Elfogad</th>
+                            <th>Elutasít</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {tableItems}
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
+
+
         return (
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md">
                         <h4>Kért szabadságok:</h4>
-                        <div className="table-responsive">
-                            <table id="mytable" className="table table-bordred table-striped">
-                                <thead>
-                                <th>Név</th>
-                                <th>Ettől</th>
-                                <th>Eddig</th>
-                                <th>Leírás</th>
-                                <th>Ekkor kérte</th>
-                                <th>Állapot</th>
-                                <th>Módosítás</th>
-                                <th>Törlés</th>
-                                </thead>
-                                <tbody>
-                                <AdminTableItem/>
-                                <AdminTableItem/>
-                                <AdminTableItem/>
-                                <AdminTableItem/>
-                                <AdminTableItem/>
-                                <AdminTableItem/>
-
-                                </tbody>
-                            </table>
-                        </div>
+                        {tableContent}
                     </div>
                 </div>
             </div>)
@@ -56,11 +109,15 @@ class AdminTable extends Component {
 }
 
 AdminTable.propTypes = {
-    auth: PropTypes.object.isRequired
+    getAllRequest: PropTypes.func.isRequired,
+    changeRequestState: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.auth,
+    profile: state.profile
 });
 
-export default connect(mapStateToProps)(AdminTable);
+export default connect(mapStateToProps, {getAllRequest, changeRequestState})(AdminTable);

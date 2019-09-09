@@ -4,13 +4,12 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
-import {getRequests} from "../../actions/profileActions";
+import {getAllRequest} from "../../actions/profileActions";
 
 class MainCalendar extends Component {
 
     componentDidMount() {
-        const id = this.props.auth.user.id;
-        this.props.getRequests(id);
+        this.props.getAllRequest();
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
@@ -23,38 +22,45 @@ class MainCalendar extends Component {
     }
 
     render() {
-        const {requests} = this.props.profile;
+        const {allRequests, loading} = this.props.profile;
+        let calendarEvents = [];
+        let calendar;
+
+        if (!(allRequests === null || loading)) {
+            calendarEvents = allRequests.map(request =>
+                [
+                    {
+                        title: request.description,
+                        start: request.start_date,
+                        end: request.end_date
+                    }
+                ]
+            );
+            console.log(calendarEvents);
+            calendar = (
+                    <div className="container-fluid">
+                        <FullCalendar defaultView="dayGridMonth"
+                                      plugins={[dayGridPlugin, interactionPlugin]}
+                                      firstDay={1}
+                                      selectable={true}
+                                      contentHeight={"auto"}
+                                      height={"auto"}
+                                      events ={calendarEvents}
+                        />
+                    </div>
+            )
+        }
+
         return (
-            <FullCalendar defaultView="dayGridMonth"
-                          plugins={[dayGridPlugin, interactionPlugin]}
-                          firstDay={1}
-                          selectable={true}
-                          contentHeight={"auto"}
-                          height={"auto"}
-                          events={[
-                              {
-                                  title: 'The Title',
-                                  start: '2019-08-01',
-                                  end: '2019-08-06'
-                              },
-                              {
-                                  title: 'The Title',
-                                  start: '2019-08-01',
-                                  end: '2019-08-06'
-                              },
-                              {
-                                  title: 'The Title',
-                                  start: '2019-08-02',
-                                  end: '2019-08-06'
-                              }
-                          ]}
-            />
+            <div>
+                {calendar}
+            </div>
         );
     }
 }
 
 MainCalendar.propTypes = {
-    getRequests: PropTypes.func.isRequired,
+    getAllRequest: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired
 };
@@ -64,4 +70,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getRequests})(MainCalendar);
+export default connect(mapStateToProps, {getAllRequest})(MainCalendar);
