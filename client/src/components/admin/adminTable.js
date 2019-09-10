@@ -24,12 +24,12 @@ class AdminTable extends Component {
 
     acceptOnClick(id) {
         const newState = {state: 'Elfogadva'};
-        this.props.changeRequestState(id, newState,this.props.history)
+        this.props.changeRequestState(id, newState)
     }
 
     declineOnClick(id){
         const newState = {state: 'Elutasítva'};
-        this.props.changeRequestState(id,newState,this.props.history);
+        this.props.changeRequestState(id,newState);
     }
 
     render() {

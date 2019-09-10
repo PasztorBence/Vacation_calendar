@@ -110,7 +110,7 @@ export const getAllRequest = () => dispatch => {
 };
 
 //Change the state of a request
-export const changeRequestState = (id, newState,history) => dispatch => {
+export const changeRequestState = (id, newState,) => dispatch => {
     axios
         .put(`api/request/admin/${id}`,newState)
         .then(res =>

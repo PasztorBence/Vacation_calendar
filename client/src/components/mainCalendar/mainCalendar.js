@@ -28,26 +28,27 @@ class MainCalendar extends Component {
 
         if (!(allRequests === null || loading)) {
             calendarEvents = allRequests.map(request =>
-                [
+                (
                     {
-                        title: request.description,
+                        title: "  -"+request.description + " - " + request.state,
                         start: request.start_date,
-                        end: request.end_date
+                        end: request.end_date,
+                        allDay: true,
                     }
-                ]
+                )
             );
-            console.log(calendarEvents);
+            console.log(calendarEvents[0]);
             calendar = (
-                    <div className="container-fluid">
-                        <FullCalendar defaultView="dayGridMonth"
-                                      plugins={[dayGridPlugin, interactionPlugin]}
-                                      firstDay={1}
-                                      selectable={true}
-                                      contentHeight={"auto"}
-                                      height={"auto"}
-                                      events ={calendarEvents}
-                        />
-                    </div>
+                <div className="container-fluid">
+                    <FullCalendar defaultView="dayGridMonth"
+                                  plugins={[dayGridPlugin, interactionPlugin]}
+                                  firstDay={1}
+                                  selectable={true}
+                                  contentHeight={"auto"}
+                                  height={"auto"}
+                                  events={calendarEvents}
+                    />
+                </div>
             )
         }
 
