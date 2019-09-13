@@ -14,22 +14,33 @@ const UnallowedDate = require('../../models/unallowedDates');
 router.post('/admin',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
-        const {errors, isValid} = validateUnallowedDateInput(req.body);
+    //const {errors, isValid} = validateUnallowedDateInput(req.body);
         //Check validation
-        if (!isValid) {
-            //return any errors with 400 status
-            return res.status(400).json(errors);
-        } else {
+
             const newUnallow = new UnallowedDate({
                 start_date: req.body.start_date,
-                end_date: req.body.end_date,
                 description: req.body.description
             });
             newUnallow
                 .save()
                 .then(unallow => res.json(unallow))
                 .catch(err => console.log(err));
-        }
+
+    }
+);
+
+//@route        GET api/unallow/admin
+//@description  Lekér minden tiltott dátumot
+//@access       Private
+router.get('/admin',
+    passport.authenticate('jwt', {session: false}),
+    (req, res) => {
+        UnallowedDate
+            .find()
+            .sort({start_date: -1})
+            .then(dates => res.json(dates))
+            .catch(err => res.status(404).json({nodatesfound: 'No dates found'})
+            );
     }
 );
 

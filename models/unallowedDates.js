@@ -7,10 +7,6 @@ const UnallowedDateSchema = new Schema({
         type: Date,
         required: true
     },
-    end_date: {
-        type: Date,
-        required: true
-    },
     description: {
         type: String
     }

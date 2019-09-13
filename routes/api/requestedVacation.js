@@ -17,7 +17,7 @@ router.get('/all',
         RequestedVacation
             .find()
             .populate('user','name')
-            .sort({start_date: -1})
+            .sort({state: -1})
             .then(requests => res.json(requests))
             .catch(err => res.status(404).json({norequestsfound: 'No requests found'})
             );
@@ -63,7 +63,7 @@ router.get('/user/:id',
     (req, res) => {
         RequestedVacation
             .find({user: req.params.id})
-            .sort({start_date: -1})
+            .sort({state: -1})
             .then(post => res.json(post))
             .catch(err => res.status(404).json({norequestfound: 'No request found with that id'}))
     }
@@ -117,6 +117,7 @@ router.put('/admin/:id',
     (req, res) => {
         const newState = {};
         newState.state = req.body.state;
+        newState.color = req.body.color;
         RequestedVacation
             .findOneAndUpdate(
                 {_id: req.params.id},

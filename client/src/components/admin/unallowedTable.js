@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import Moment from 'react-moment';
-import {getCurrentProfile, getRequests, deleteRequest} from "../../actions/profileActions";
+import {getCurrentProfile, getAllUnAllowedDate,deleteUnAllowing} from "../../actions/profileActions";
 
-class UserTable extends Component {
+class UnAllowedTable extends Component {
 
     componentDidMount() {
         this.props.getCurrentProfile();
-        this.props.getRequests(this.props.auth.user.id);
+        this.props.getAllUnAllowedDate();
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
@@ -21,26 +21,25 @@ class UserTable extends Component {
     }
 
     deleteOnClick(id) {
-        this.props.deleteRequest(id, this.props.history);
+        this.props.deleteUnAllowing(id,this, this.props.history);
+        window.location.reload();
     }
 
     render() {
-        const {profile,loading,requests} = this.props.profile;
+        const {profile, loading, unAllowedDates} = this.props.profile;
 
         let tableContent;
         let tableItems;
-        if (!(requests === null)) {
-            tableItems = requests.map(request => (
-                    <tr key={request._id}>
-                        <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
-                        <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
-                        <td>{request.description}</td>
-                        <td>{request.state}</td>
+        if (!(unAllowedDates === null)) {
+            tableItems = unAllowedDates.map(date => (
+                    <tr key={date._id}>
+                        <td><Moment format={"YYYY.MM.DD"}>{date.start_date}</Moment></td>
+                        <td>{date.description}</td>
                         <td>
                             <p data-placement="top"
                                data-toggle="tooltip"
                                title="Delete">
-                                <button onClick={this.deleteOnClick.bind(this, request._id)}
+                                <button onClick={this.deleteOnClick.bind(this, date._id)}
                                         className="btn btn-danger btn-xs"
                                         data-title="Delete"
                                         data-toggle="modal"
@@ -62,10 +61,8 @@ class UserTable extends Component {
                     <table id="mytable" className="table table-sm table-bordered table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>Ettől</th>
-                            <th>Eddig</th>
+                            <th>dátum</th>
                             <th>Leírás</th>
-                            <th>Állapot</th>
                             <th>Törlés</th>
                         </tr>
                         </thead>
@@ -82,8 +79,12 @@ class UserTable extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md">
-                        <a className="nav-link" href="/user/newrequest">új kérvény</a>
-                        <h4>Kért szabadságok:</h4>
+                        <ul className="nav">
+                            <li className="nav-item">
+                                <a className="nav-link active" href="/newunalloweddate">Új tiltás</a>
+                            </li>
+                        </ul>
+                        <h4>Tiltott dátumok:</h4>
                         {tableContent}
                     </div>
                 </div>
@@ -92,9 +93,10 @@ class UserTable extends Component {
     }
 }
 
-UserTable.propTypes = {
+UnAllowedTable.propTypes = {
     getCurrentProfile: PropTypes.func.isRequired,
-    getRequests: PropTypes.func.isRequired,
+    getAllUnAllowedDate: PropTypes.func.isRequired,
+    deleteUnAllowing: PropTypes.func.isRequired,
     deleteRequest: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired
@@ -105,4 +107,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getCurrentProfile, getRequests, deleteRequest})(UserTable);
+export default connect(mapStateToProps, {getCurrentProfile, getAllUnAllowedDate,deleteUnAllowing})(UnAllowedTable);

@@ -1,9 +1,17 @@
-import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_REQUESTS,GET_ALL_REQUESTS} from "../actions/types";
+import {
+    GET_PROFILE,
+    PROFILE_LOADING,
+    CLEAR_CURRENT_PROFILE,
+    GET_REQUESTS,
+    GET_ALL_REQUESTS,
+    GET_ALL_UNALLOWED_DATE
+} from "../actions/types";
 
 const initialState = {
     profile: null,
     requests: null,
     allRequests: null,
+    unAllowedDates: null,
     loading: false
 };
 
@@ -28,14 +36,20 @@ export default function (state = initialState, action) {
             };
         case GET_ALL_REQUESTS:
             return {
-              ...state,
-              allRequests: action.payload,
-              loading: false
+                ...state,
+                allRequests: action.payload,
+                loading: false
             };
         case CLEAR_CURRENT_PROFILE:
             return {
                 ...state,
                 profile: null
+            };
+        case GET_ALL_UNALLOWED_DATE:
+            return {
+                ...state,
+                unAllowedDates: action.payload,
+                loading: false
             };
         default:
             return state;

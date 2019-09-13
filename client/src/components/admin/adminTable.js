@@ -23,13 +23,19 @@ class AdminTable extends Component {
     }
 
     acceptOnClick(id) {
-        const newState = {state: 'Elfogadva'};
+        const newState = {
+            state: 'Elfogadva',
+            color: 'green'
+        };
         this.props.changeRequestState(id, newState)
     }
 
-    declineOnClick(id){
-        const newState = {state: 'Elutasítva'};
-        this.props.changeRequestState(id,newState);
+    declineOnClick(id) {
+        const newState = {
+            state: 'Elutasítva',
+            color: 'red'
+        };
+        this.props.changeRequestState(id, newState);
     }
 
     render() {
@@ -50,7 +56,7 @@ class AdminTable extends Component {
                             <button
                                 type="button"
                                 className="btn btn-success"
-                                onClick={this.acceptOnClick.bind(this,request._id)}
+                                onClick={this.acceptOnClick.bind(this, request._id)}
                             >
                                 Elfogad
                             </button>
@@ -59,7 +65,7 @@ class AdminTable extends Component {
                             <button
                                 type="button"
                                 className="btn btn-danger"
-                                onClick={this.declineOnClick.bind(this,request._id)}
+                                onClick={this.declineOnClick.bind(this, request._id)}
                             >
                                 Elutasít
                             </button>
@@ -74,7 +80,10 @@ class AdminTable extends Component {
         } else {
             tableContent = (
                 <div className="table-responsive">
-                    <table id="mytable" className="table table-bordred table-striped">
+                    <table
+                        id="mytable"
+                        className="table table-sm table-bordered table-striped table-hover"
+                    >
                         <thead>
                         <tr>
                             <th>Név</th>
@@ -100,6 +109,14 @@ class AdminTable extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md">
+                        <ul className="nav">
+                            <li className="nav-item">
+                                <a className="nav-link active" href="/unalloweddates">Tiltott dátumok</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">Dolgozók kérhető napjai</a>
+                            </li>
+                        </ul>
                         <h4>Kért szabadságok:</h4>
                         {tableContent}
                     </div>

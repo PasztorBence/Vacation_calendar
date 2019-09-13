@@ -14,6 +14,8 @@ import Login from "./components/auth/login";
 import UserTable from "./components/user/userTable";
 import AdminTable from "./components/admin/adminTable";
 import NewRequest from "./components/user/newRequest";
+import UnAllowedTable from "./components/admin/unallowedTable"
+import NewUnAllowing from "./components/admin/newUnallowing";
 //Css imports
 import './App.css';
 import '@fullcalendar/core/main.css';
@@ -50,7 +52,9 @@ function App() {
                     <Route exact path="/login" component={Login}/>
                     <Route exact path="/user" component={UserTable}/>
                     <Route exact path="/admin" component={AdminTable}/>
-                    <Route exact path ="/newrequest" component={NewRequest}/>
+                    <Route exact path="/unalloweddates" component={UnAllowedTable}/>
+                    <Route exact path="/newunalloweddate" component={NewUnAllowing}/>
+                    <Route exact path="/newrequest" component={NewRequest}/>
                 </div>
             </Router>
         </Provider>

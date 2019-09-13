@@ -19,6 +19,10 @@ const RequestedVacationSchema = new Schema({
         type: String,
         default: 'Függőben'
     },
+    color: {
+        type: String,
+        default: 'yellow'
+    },
     description: {
         type: String
     }

@@ -4,12 +4,13 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
-import {getAllRequest} from "../../actions/profileActions";
+import {getAllRequest, getAllUnAllowedDate} from "../../actions/profileActions";
 
 class MainCalendar extends Component {
 
     componentDidMount() {
         this.props.getAllRequest();
+        this.props.getAllUnAllowedDate();
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
@@ -22,22 +23,34 @@ class MainCalendar extends Component {
     }
 
     render() {
-        const {allRequests, loading} = this.props.profile;
+        const {allRequests, unAllowedDates, loading} = this.props.profile;
         let calendarEvents = [];
+        let calendarBackground = [];
+        let allData = [];
         let calendar;
 
-        if (!(allRequests === null || loading)) {
+        if (!(allRequests === null || loading || unAllowedDates === null)) {
             calendarEvents = allRequests.map(request =>
                 (
                     {
-                        title: "  -"+request.description + " - " + request.state,
+                        title: request.user.name + "  - " + request.description + " - " + request.state,
                         start: request.start_date,
                         end: request.end_date,
+                        color: request.color,
                         allDay: true,
                     }
                 )
             );
-            console.log(calendarEvents[0]);
+            calendarBackground = unAllowedDates.map(date => (
+                    {
+                        start: date.start_date,
+                        color: 'black',
+                        allDay: true,
+                        rendering: 'background'
+                    }
+                )
+            );
+            allData = calendarEvents.concat(calendarBackground);
             calendar = (
                 <div className="container-fluid">
                     <FullCalendar defaultView="dayGridMonth"
@@ -46,7 +59,7 @@ class MainCalendar extends Component {
                                   selectable={true}
                                   contentHeight={"auto"}
                                   height={"auto"}
-                                  events={calendarEvents}
+                                  events={allData}
                     />
                 </div>
             )
@@ -62,6 +75,7 @@ class MainCalendar extends Component {
 
 MainCalendar.propTypes = {
     getAllRequest: PropTypes.func.isRequired,
+    getAllUnAllowedDate: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired
 };
@@ -71,4 +85,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getAllRequest})(MainCalendar);
+export default connect(mapStateToProps, {getAllRequest, getAllUnAllowedDate})(MainCalendar);
