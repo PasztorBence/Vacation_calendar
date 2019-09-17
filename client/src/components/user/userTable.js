@@ -82,7 +82,7 @@ class UserTable extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md">
-                        <a className="nav-link" href="/user/newrequest">új kérvény</a>
+                        <a className="nav-link" href="/newrequest">új kérvény</a>
                         <h4>Kért szabadságok:</h4>
                         {tableContent}
                     </div>

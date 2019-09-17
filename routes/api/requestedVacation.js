@@ -7,6 +7,7 @@ const validateRequestedVacationInput = require('../../validators/datePairValidat
 
 //Load model
 const RequestedVacation = require('../../models/requestedVacations');
+const UnallowedDate = require('../../models/unallowedDates');
 
 //@route        GET api/request/all
 //@description  Minden kérést lekér
@@ -16,7 +17,7 @@ router.get('/all',
     (req, res) => {
         RequestedVacation
             .find()
-            .populate('user','name')
+            .populate('user', 'name')
             .sort({state: -1})
             .then(requests => res.json(requests))
             .catch(err => res.status(404).json({norequestsfound: 'No requests found'})
@@ -35,22 +36,29 @@ router.post('/user',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
         const {errors, isValid} = validateRequestedVacationInput(req.body);
-        //Check validation
-        if (!isValid) {
-            //return any errors with 400 status
-            return res.status(400).json(errors);
-        } else {
-            const newRequest = new RequestedVacation({
-                user: req.user.id,
-                start_date: req.body.start_date,
-                end_date: req.body.end_date,
-                description: req.body.description
-            });
-            newRequest
-                .save()
-                .then(request => res.json(request))
-                .catch(err => console.log(err));
-        }
+        UnallowedDate.findOne({start_date: {$gte: req.body.start_date, $lte: req.body.end_date}})
+            .then(unallowed => {
+                if (unallowed) {
+                    errors.unallowed = 'This date is already unallowed';
+                    return res.status(400).json(errors.unallowed)
+                } else {
+                    if (!isValid) {
+                        //return any errors with 400 status
+                        return res.status(400).json(errors);
+                    } else {
+                        const newRequest = new RequestedVacation({
+                            user: req.user.id,
+                            start_date: req.body.start_date,
+                            end_date: req.body.end_date,
+                            description: req.body.description
+                        });
+                        newRequest
+                            .save()
+                            .then(request => res.json(request))
+                            .catch(err => console.log(err));
+                    }
+                }
+            })
     }
 );
 

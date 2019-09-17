@@ -27,7 +27,8 @@ class AdminTable extends Component {
             state: 'Elfogadva',
             color: 'green'
         };
-        this.props.changeRequestState(id, newState)
+        this.props.changeRequestState(id, newState);
+        window.location.reload();
     }
 
     declineOnClick(id) {
@@ -36,6 +37,7 @@ class AdminTable extends Component {
             color: 'red'
         };
         this.props.changeRequestState(id, newState);
+        window.location.reload();
     }
 
     render() {

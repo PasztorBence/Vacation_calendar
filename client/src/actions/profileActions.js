@@ -70,12 +70,12 @@ export const createRequest = (newData, history) => dispatch => {
                     type: GET_REQUESTS,
                     payload: res.data
                 }),
-            history.push('/user')
+            window.location.reload
         )
         .catch(err =>
             dispatch({
                 type: GET_REQUESTS,
-                payload: null
+                payload: err.data
             })
         )
 };

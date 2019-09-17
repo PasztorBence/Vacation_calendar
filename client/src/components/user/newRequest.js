@@ -10,7 +10,8 @@ class NewRequest extends Component {
         this.state = {
             start_date: '',
             end_date: '',
-            description: ''
+            description: '',
+            errors: {}
         };
 
         this.onChange = this.onChange.bind(this);
@@ -50,7 +51,7 @@ class NewRequest extends Component {
 
     render() {
 
-        //const {errors} = this.state;
+        const {errors} = this.state;
 
         return (
             <div className="login">
@@ -63,7 +64,7 @@ class NewRequest extends Component {
                                     <input
                                         type="date"
                                         className={classnames('form-control form-control-lg', {
-                                            //'is-invalid': errors.start_date
+                                            'is-invalid': errors.start_date
                                         })}
                                         placeholder="Start Date"
                                         name="start_date"
@@ -75,7 +76,7 @@ class NewRequest extends Component {
                                     <input
                                         type="date"
                                         className={classnames('form-control form-control-lg', {
-                                            //'is-invalid': errors.start_date
+                                            'is-invalid': errors.start_date
                                         })}
                                         placeholder="End Date"
                                         name="end_date"
