@@ -39,8 +39,8 @@ router.post('/user',
         UnallowedDate.findOne({start_date: {$gte: req.body.start_date, $lte: req.body.end_date}})
             .then(unallowed => {
                 if (unallowed) {
-                    errors.unallowed = 'This date is already unallowed';
-                    return res.status(400).json(errors.unallowed)
+                    errors.start_date = 'This date is already unallowed';
+                    return res.status(400).json(errors)
                 } else {
                     if (!isValid) {
                         //return any errors with 400 status

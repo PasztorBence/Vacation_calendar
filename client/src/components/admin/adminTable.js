@@ -116,7 +116,7 @@ class AdminTable extends Component {
                                 <a className="nav-link active" href="/unalloweddates">Tiltott dátumok</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Dolgozók kérhető napjai</a>
+                                <a className="nav-link" href="/remainingdays">Dolgozók kérhető napjai</a>
                             </li>
                         </ul>
                         <h4>Kért szabadságok:</h4>

@@ -5,7 +5,8 @@ import {
     CLEAR_CURRENT_PROFILE,
     GET_REQUESTS,
     GET_ALL_REQUESTS,
-    GET_ALL_UNALLOWED_DATE
+    GET_ALL_UNALLOWED_DATE,
+    GET_ALL_USER
 } from "./types";
 
 //Get current profile
@@ -73,10 +74,11 @@ export const createRequest = (newData, history) => dispatch => {
             window.location.reload
         )
         .catch(err =>
-            dispatch({
-                type: GET_REQUESTS,
-                payload: err.data
-            })
+                dispatch({
+                    type: GET_REQUESTS,
+                    payload: err.data
+                }),
+            window.location.reload
         )
 };
 
@@ -159,16 +161,35 @@ export const getAllUnAllowedDate = () => dispatch => {
         )
 };
 
+//Get all user data
+export const getAllUser = () => dispatch => {
+    dispatch(setProfileLoading());
+    axios
+        .get('api/users/all')
+        .then(res =>
+            dispatch({
+                type: GET_ALL_USER,
+                payload: res.data
+            }),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ALL_USER,
+                payload: null
+            })
+        )
+};
+
 //Delete a request from the list
-export const deleteUnAllowing = (id,history) => dispatch => {
+export const deleteUnAllowing = (id, history) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .delete(`api/unallow/admin/${id}`)
         .then(res =>
-                dispatch({
-                    type: GET_ALL_UNALLOWED_DATE,
-                    payload: res.data
-                }),
+            dispatch({
+                type: GET_ALL_UNALLOWED_DATE,
+                payload: res.data
+            }),
         )
         .catch(err =>
             dispatch({
@@ -195,5 +216,25 @@ export const changeRequestState = (id, newState,) => dispatch => {
                 type: GET_ALL_REQUESTS,
                 payload: null
             })
+        )
+};
+
+//Set the remaining day of a user
+export const changeRemainingDay = (id, newDay) => dispatch => {
+    dispatch(setProfileLoading());
+    axios
+        .put(`api/users/admin/${id}`, newDay)
+        .then(res =>
+                dispatch({
+                    type: GET_ALL_USER,
+                    payload: res.data
+                }),
+        )
+        .catch(err =>
+                dispatch({
+                    type: GET_ALL_USER,
+                    payload: null
+                }),
+            window.location.reload
         )
 };

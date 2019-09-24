@@ -148,9 +148,11 @@ router.put('/admin/:id',
                 {$set: newRemainingDays},
                 {new: true}
             )
-            .then(res.json({succes: true}))
-            .catch(err => res.json(err))
-    }
-);
+            .then(request => res.json(request))
+            .catch(err => {
+                res.status(400).json({remainingday: 'Cant update remaining days'})
+            })
+
+    });
 
 module.exports = router;

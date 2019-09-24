@@ -29,6 +29,7 @@ class UserTable extends Component {
 
         let tableContent;
         let tableItems;
+        let availableDays;
         if (!(requests === null)) {
             tableItems = requests.map(request => (
                     <tr key={request._id}>
@@ -53,6 +54,7 @@ class UserTable extends Component {
                     </tr>
                 )
             );
+            availableDays = profile.remaining_days;
         }
         if (profile === null || loading) {
             tableContent = <h4>Betöltés...</h4>
@@ -83,6 +85,7 @@ class UserTable extends Component {
                 <div className="row">
                     <div className="col-md">
                         <a className="nav-link" href="/newrequest">új kérvény</a>
+                        <h4>Kérhető napok: {availableDays}</h4>
                         <h4>Kért szabadságok:</h4>
                         {tableContent}
                     </div>

@@ -16,6 +16,7 @@ import AdminTable from "./components/admin/adminTable";
 import NewRequest from "./components/user/newRequest";
 import UnAllowedTable from "./components/admin/unallowedTable"
 import NewUnAllowing from "./components/admin/newUnallowing";
+import RemainingDaysTable from "./components/admin/remainingDayTable";
 //Css imports
 import './App.css';
 import '@fullcalendar/core/main.css';
@@ -55,6 +56,7 @@ function App() {
                     <Route exact path="/unalloweddates" component={UnAllowedTable}/>
                     <Route exact path="/newunalloweddate" component={NewUnAllowing}/>
                     <Route exact path="/newrequest" component={NewRequest}/>
+                    <Route exact path="/remainingdays" component={RemainingDaysTable}/>
                 </div>
             </Router>
         </Provider>
