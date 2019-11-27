@@ -22,7 +22,8 @@ class UnAllowedTable extends Component {
 
     deleteOnClick(id) {
         this.props.deleteUnAllowing(id,this, this.props.history);
-        window.location.reload();
+        setTimeout(this.props.getAllUnAllowedDate(),3000)
+        //window.location.reload();
     }
 
     render() {

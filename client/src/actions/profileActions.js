@@ -6,7 +6,8 @@ import {
     GET_REQUESTS,
     GET_ALL_REQUESTS,
     GET_ALL_UNALLOWED_DATE,
-    GET_ALL_USER
+    GET_ALL_USER,
+    GET_ERRORS
 } from "./types";
 
 //Get current profile
@@ -23,7 +24,7 @@ export const getCurrentProfile = () => dispatch => {
         .catch(err =>
             dispatch({
                 type: GET_PROFILE,
-                payload: {}
+                payload: null
             })
         )
 };
@@ -66,20 +67,6 @@ export const createRequest = (newData, history) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .post('api/request/user/', newData)
-        .then(res =>
-                dispatch({
-                    type: GET_REQUESTS,
-                    payload: res.data
-                }),
-            window.location.reload
-        )
-        .catch(err =>
-                dispatch({
-                    type: GET_REQUESTS,
-                    payload: err.data
-                }),
-            window.location.reload
-        )
 };
 
 //Create a new unAllowed date
@@ -118,7 +105,7 @@ export const deleteRequest = (id) => dispatch => {
         .catch(err =>
             dispatch({
                 type: GET_REQUESTS,
-                payload: null
+                payload: err.data
             })
         )
 };
@@ -205,11 +192,10 @@ export const changeRequestState = (id, newState,) => dispatch => {
     axios
         .put(`api/request/admin/${id}`, newState)
         .then(res =>
-                dispatch({
-                    type: GET_ALL_REQUESTS,
-                    payload: res.data
-                }),
-            window.location.reload
+            dispatch({
+                type: GET_ALL_REQUESTS,
+                payload: res.data
+            }),
         )
         .catch(err =>
             dispatch({
@@ -233,8 +219,7 @@ export const changeRemainingDay = (id, newDay) => dispatch => {
         .catch(err =>
                 dispatch({
                     type: GET_ALL_USER,
-                    payload: null
+                    payload: err.data
                 }),
-            window.location.reload
         )
 };

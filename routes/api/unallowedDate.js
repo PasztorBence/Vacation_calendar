@@ -40,7 +40,7 @@ router.get('/admin',
             .sort({start_date: -1})
             .then(dates => res.json(dates))
             .catch(err => res.status(404).json({nodatesfound: 'No dates found'})
-            );
+            )
     }
 );
 
@@ -81,7 +81,12 @@ router.delete('/admin/:id',
     (req, res) => {
         UnallowedDate
             .deleteOne({_id: req.params.id})
-            .then(res.json({succes: true}))
+            .then(UnallowedDate
+                .find()
+                .sort({start_date: -1})
+                .then(dates => res.json(dates))
+                .catch(err => res.status(404).json({nodatesfound: 'No dates found'})
+                ))
             .catch(err => res.status(404).json({norequestfound: 'No unallowed date found with that id'}))
     }
 );

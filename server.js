@@ -18,7 +18,8 @@ const db = require('./config/keys').mongoURI;
 
 // Connect to MongoDB
 mongoose
-    .connect(db)
+    //.connect(db)
+    .connect('mongodb://localhost:27017/calendar', {useNewUrlParser: true})
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 

@@ -9,7 +9,7 @@ module.exports = function validateProfileInput(data) {
     if (Validator.isEmpty(data.start_date)) {
         errors.start_date = "Start date is required";
     }
-    if (!(data.start_date < data.end_date)) {
+    if ((data.start_date > data.end_date)) {
         errors.start_date = 'Start date need to be before the end date!'
     }
     if (Validator.isEmpty(data.end_date)) {

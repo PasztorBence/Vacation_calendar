@@ -17,11 +17,10 @@ router.get('/all',
     (req, res) => {
         RequestedVacation
             .find()
-            .populate('user', 'name')
+            .populate('user', ['name', 'remaining_days'])
             .sort({state: -1})
             .then(requests => res.json(requests))
-            .catch(err => res.status(404).json({norequestsfound: 'No requests found'})
-            );
+            .catch(err => res.status(404).json({norequestsfound: 'No requests found'}));
     }
 );
 
@@ -36,10 +35,15 @@ router.post('/user',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
         const {errors, isValid} = validateRequestedVacationInput(req.body);
+        //check validation
+        if (!isValid) {
+            return res.status(400).json(errors);
+        }
+
         UnallowedDate.findOne({start_date: {$gte: req.body.start_date, $lte: req.body.end_date}})
             .then(unallowed => {
                 if (unallowed) {
-                    errors.start_date = 'This date is already unallowed';
+                    errors.start_date = 'Ez a dátum tiltott!';
                     return res.status(400).json(errors)
                 } else {
                     if (!isValid) {
@@ -85,7 +89,12 @@ router.delete('/user/:id',
     (req, res) => {
         RequestedVacation
             .deleteOne({_id: req.params.id})
-            .then(res.json({succes: true}))
+            .then(RequestedVacation
+                .find({user: req.params.id})
+                .sort({state: -1})
+                .then(post => res.json(post))
+                .catch(err => res.status(404).json({norequestfound: 'No request found with that id'}))
+            )
             .catch(err => res.status(404).json({norequestfound: 'No request found with that id'}))
     }
 );
@@ -132,7 +141,13 @@ router.put('/admin/:id',
                 {$set: newState},
                 {new: true}
             )
-            .then(res.json({succes: true}))
+            .then(
+                RequestedVacation
+                    .find()
+                    .populate('user', ['name', 'remaining_days'])
+                    .sort({state: -1})
+                    .then(requests => res.json(requests))
+                    .catch(err => res.status(404).json({norequestsfound: 'No requests found'})))
             .catch(err => res.json(err))
     }
 );

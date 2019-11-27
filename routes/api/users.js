@@ -24,7 +24,7 @@ router.post('/register', (req, res) => {
     User.findOne({email: req.body.email})
         .then(user => {
             if (user) {
-                errors.email = 'Email already exists';
+                errors.email = 'Ez az e-mail cím már regisztrálva van!';
                 return res.status(400).json({email: errors})
             } else {
                 const newUser = new User({
@@ -66,7 +66,7 @@ router.post('/login', (req, res) => {
         .then(user => {
             //check for user
             if (!user) {
-                errors.email = 'User not found';
+                errors.email = 'Hibás e-mail cím!';
                 return res.status(404).json(errors)
             }
             //check password
@@ -93,7 +93,7 @@ router.post('/login', (req, res) => {
                                 })
                             });
                     } else {
-                        errors.password = 'Password incorrect';
+                        errors.password = 'Hibás jelszó!';
                         return res.status(400).json(errors);
                     }
                 })
@@ -148,7 +148,18 @@ router.put('/admin/:id',
                 {$set: newRemainingDays},
                 {new: true}
             )
-            .then(request => res.json(request))
+            .then(User.find()
+                .then(users => {
+                    if (!users) {
+                        errors.nouser = 'There is no users';
+                        return res.status(404).json(errors);
+                    }
+                    res.json(users);
+                })
+                .catch(err => {
+                    res.status(404).json({profile: 'There are no profiles'})
+                })
+            )
             .catch(err => {
                 res.status(400).json({remainingday: 'Cant update remaining days'})
             })

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
-import {PropTypes} from 'prop-types';
-import {connect} from 'react-redux';
-import {getAllRequest, getAllUnAllowedDate} from "../../actions/profileActions";
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
+import { getAllRequest, getAllUnAllowedDate } from "../../actions/profileActions";
 
 class MainCalendar extends Component {
 
@@ -23,7 +23,7 @@ class MainCalendar extends Component {
     }
 
     render() {
-        const {allRequests, unAllowedDates, loading} = this.props.profile;
+        const { allRequests, unAllowedDates, loading } = this.props.profile;
         let calendarEvents = [];
         let calendarBackground = [];
         let allData = [];
@@ -35,31 +35,31 @@ class MainCalendar extends Component {
                     {
                         title: request.user.name + "  - " + request.description + " - " + request.state,
                         start: request.start_date,
-                        end: request.end_date,
+                        end: new Date(request.end_date).setDate(new Date(request.end_date).getDate() + 1),
                         color: request.color,
                         allDay: true,
                     }
                 )
             );
             calendarBackground = unAllowedDates.map(date => (
-                    {
-                        start: date.start_date,
-                        color: 'black',
-                        allDay: true,
-                        rendering: 'background'
-                    }
-                )
+                {
+                    start: date.start_date,
+                    color: 'black',
+                    allDay: true,
+                    rendering: 'background'
+                }
+            )
             );
             allData = calendarEvents.concat(calendarBackground);
             calendar = (
                 <div className="container-fluid">
                     <FullCalendar defaultView="dayGridMonth"
-                                  plugins={[dayGridPlugin, interactionPlugin]}
-                                  firstDay={1}
-                                  selectable={true}
-                                  contentHeight={"auto"}
-                                  height={"auto"}
-                                  events={allData}
+                        plugins={[dayGridPlugin, interactionPlugin]}
+                        firstDay={1}
+                        selectable={true}
+                        contentHeight={"auto"}
+                        height={"auto"}
+                        events={allData}
                     />
                 </div>
             )
@@ -85,4 +85,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getAllRequest, getAllUnAllowedDate})(MainCalendar);
+export default connect(mapStateToProps, { getAllRequest, getAllUnAllowedDate })(MainCalendar);

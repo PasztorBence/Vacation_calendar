@@ -57,6 +57,7 @@ class NewUnAllowing extends Component {
                             <h1 className="display-4 text-center">Új kérvény</h1>
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
+                                    <h4>Dátum:</h4>
                                     <input
                                         type="date"
                                         className={classnames('form-control form-control-lg', {
@@ -69,18 +70,21 @@ class NewUnAllowing extends Component {
                                     />
                                 </div>
                                 <div className="form-group">
+                                    <h4>Leírás:</h4>
                                     <input
                                         type="string"
                                         className={classnames('form-control form-control-lg', {
                                             // 'is-invalid': errors.password
                                         })}
-                                        placeholder="Leírás"
+                                        placeholder="Opcionális"
                                         name="description"
                                         value={this.state.description}
                                         onChange={this.onChange}
                                     />
                                 </div>
-                                <input type="submit" className="btn btn-info btn-block mt-4"/>
+                                <input type="submit"
+                                       className="btn btn-info btn-block mt-4"
+                                />
                             </form>
                         </div>
                     </div>

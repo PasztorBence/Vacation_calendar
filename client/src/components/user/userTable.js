@@ -22,6 +22,7 @@ class UserTable extends Component {
 
     deleteOnClick(id) {
         this.props.deleteRequest(id, this.props.history);
+        this.props.getRequests(this.props.auth.user.id);
     }
 
     render() {
@@ -30,7 +31,8 @@ class UserTable extends Component {
         let tableContent;
         let tableItems;
         let availableDays;
-        if (!(requests === null)) {
+        if (!(requests === null || loading)) {
+            console.log(requests);
             tableItems = requests.map(request => (
                     <tr key={request._id}>
                         <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
@@ -54,7 +56,7 @@ class UserTable extends Component {
                     </tr>
                 )
             );
-            availableDays = profile.remaining_days;
+           availableDays = profile.remaining_days;
         }
         if (profile === null || loading) {
             tableContent = <h4>Betöltés...</h4>

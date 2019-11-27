@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import classnames from 'classnames';
-import {createRequest} from "../../actions/profileActions";
+import {createRequest, getRequests, getCurrentProfile} from "../../actions/profileActions";
 
 class NewRequest extends Component {
     constructor() {
@@ -19,6 +19,7 @@ class NewRequest extends Component {
     }
 
     componentDidMount() {
+        getCurrentProfile()
         if (!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
         }
@@ -42,7 +43,9 @@ class NewRequest extends Component {
             end_date: this.state.end_date,
             description: this.state.description,
         };
-        this.props.createRequest(newData, this.props.history)
+        this.props.createRequest(newData, this.props.history);
+        this.props.getRequests(this.props.auth.user.id);
+        setTimeout(this.props.history.push('/user'), 30000);
     }
 
     onChange(e) {
@@ -61,6 +64,7 @@ class NewRequest extends Component {
                             <h1 className="display-4 text-center">Új kérvény</h1>
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
+                                    <h4>Mettől:</h4>
                                     <input
                                         type="date"
                                         className={classnames('form-control form-control-lg', {
@@ -71,8 +75,10 @@ class NewRequest extends Component {
                                         value={this.state.start_date}
                                         onChange={this.onChange}
                                     />
+                                    <div className="invalid-feedback">{errors.start_date}</div>
                                 </div>
                                 <div className="form-group">
+                                    <h4>Meddig:</h4>
                                     <input
                                         type="date"
                                         className={classnames('form-control form-control-lg', {
@@ -85,12 +91,13 @@ class NewRequest extends Component {
                                     />
                                 </div>
                                 <div className="form-group">
+                                    <h4>Leírás:</h4>
                                     <input
                                         type="string"
                                         className={classnames('form-control form-control-lg', {
                                             // 'is-invalid': errors.password
                                         })}
-                                        placeholder="Leírás"
+                                        placeholder="Opcionális"
                                         name="description"
                                         value={this.state.description}
                                         onChange={this.onChange}
@@ -108,6 +115,8 @@ class NewRequest extends Component {
 
 NewRequest.propTypes = {
     createRequest: PropTypes.func.isRequired,
+    getRequests: PropTypes.func.isRequired,
+    getCurrentProfile: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
@@ -119,4 +128,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {createRequest})(NewRequest);
+export default connect(mapStateToProps, {createRequest, getRequests, getCurrentProfile})(NewRequest);

@@ -36,7 +36,6 @@ class RemainingDaysTable extends Component {
 
     onChange(e) {
         this.setState({[e.target.name]: e.target.value});
-        console.log(this.state)
     }
 
     onSubmit(e) {
@@ -45,9 +44,9 @@ class RemainingDaysTable extends Component {
         const newData = {
             remaining_days: this.state.newDay
         };
-
         this.props.changeRemainingDay(id, newData);
-        window.location.reload()
+        setTimeout(this.props.getAllUser(), 3000)
+        //window.location.reload();
     }
 
     render() {
@@ -57,6 +56,7 @@ class RemainingDaysTable extends Component {
         let tableItems;
         let selectOptions;
         if (!(users === null)) {
+            console.log(users);
             tableItems = users.map(user => (
                     <tr key={user._id}>
                         <td>{user.name}</td>
@@ -111,6 +111,10 @@ class RemainingDaysTable extends Component {
                                         value={this.state.id}
                                         onChange={this.onChange}
                                 >
+                                    <option
+                                    >
+                                        Válasszon felhasználót
+                                    </option>
                                     {selectOptions}
                                 </select>
                                 <input type="number"

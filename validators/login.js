@@ -12,7 +12,7 @@ module.exports = function validateLoginInput(data) {
         errors.email = 'Érvénytelen E-mail!';
     }
     if (Validator.isEmpty(data.email)) {
-        errors.email = 'E-mail megadása kötelező!';
+        errors.email = 'E-mail cím megadása kötelező!';
     }
     if (Validator.isEmpty(data.password)) {
         errors.password = 'Jelszó megadása kötelező!';
