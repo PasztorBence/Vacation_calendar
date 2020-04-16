@@ -7,7 +7,6 @@ import {
     GET_ALL_REQUESTS,
     GET_ALL_UNALLOWED_DATE,
     GET_ALL_USER,
-    GET_ERRORS
 } from "./types";
 
 //Get current profile
@@ -187,7 +186,7 @@ export const deleteUnAllowing = (id, history) => dispatch => {
 };
 
 //Change the state of a request
-export const changeRequestState = (id, newState,) => dispatch => {
+export const changeRequestState = (id, newState) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .put(`api/request/admin/${id}`, newState)

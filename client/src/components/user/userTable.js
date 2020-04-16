@@ -30,7 +30,7 @@ class UserTable extends Component {
 
         let tableContent;
         let tableItems;
-        let availableDays;
+        let availableDays = "";
         if (!(requests === null || loading)) {
             console.log(requests);
             tableItems = requests.map(request => (
