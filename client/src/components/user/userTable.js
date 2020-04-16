@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {PropTypes} from 'prop-types';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import {getCurrentProfile, getRequests, deleteRequest} from "../../actions/profileActions";
+import { getCurrentProfile, getRequests, deleteRequest } from "../../actions/profileActions";
 
 class UserTable extends Component {
 
@@ -26,55 +26,57 @@ class UserTable extends Component {
     }
 
     render() {
-        const {profile,loading,requests} = this.props.profile;
+        const { profile, loading, requests } = this.props.profile;
 
         let tableContent;
         let tableItems;
-        let availableDays = "";
+        let availableDays;
         if (!(requests === null || loading)) {
             console.log(requests);
             tableItems = requests.map(request => (
-                    <tr key={request._id}>
-                        <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
-                        <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
-                        <td>{request.description}</td>
-                        <td>{request.state}</td>
-                        <td>
-                            <p data-placement="top"
-                               data-toggle="tooltip"
-                               title="Delete">
-                                <button onClick={this.deleteOnClick.bind(this, request._id)}
-                                        className="btn btn-danger btn-xs"
-                                        data-title="Delete"
-                                        data-toggle="modal"
-                                        data-target="#delete"
-                                >
-                                    Törlés
+                <tr key={request._id}>
+                    <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
+                    <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
+                    <td>{request.description}</td>
+                    <td>{request.state}</td>
+                    <td>
+                        <p data-placement="top"
+                            data-toggle="tooltip"
+                            title="Delete">
+                            <button onClick={this.deleteOnClick.bind(this, request._id)}
+                                className="btn btn-danger btn-xs"
+                                data-title="Delete"
+                                data-toggle="modal"
+                                data-target="#delete"
+                            >
+                                Törlés
                                 </button>
-                            </p>
-                        </td>
-                    </tr>
-                )
-            );
-           availableDays = profile.remaining_days;
+                        </p>
+                    </td>
+                </tr>
+            ));
+        }
+        if (!(profile === null || loading)) {
+            availableDays = profile.remaining_days;
         }
         if (profile === null || loading) {
+            availableDays = <h4>Betöltés...</h4>
             tableContent = <h4>Betöltés...</h4>
         } else {
             tableContent = (
                 <div className="table-responsive">
                     <table id="mytable" className="table table-sm table-bordered table-striped table-hover">
                         <thead>
-                        <tr>
-                            <th>Ettől</th>
-                            <th>Eddig</th>
-                            <th>Leírás</th>
-                            <th>Állapot</th>
-                            <th>Törlés</th>
-                        </tr>
+                            <tr>
+                                <th>Ettől</th>
+                                <th>Eddig</th>
+                                <th>Leírás</th>
+                                <th>Állapot</th>
+                                <th>Törlés</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {tableItems}
+                            {tableItems}
                         </tbody>
                     </table>
                 </div>
@@ -110,4 +112,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getCurrentProfile, getRequests, deleteRequest})(UserTable);
+export default connect(mapStateToProps, { getCurrentProfile, getRequests, deleteRequest })(UserTable);
