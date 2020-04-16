@@ -4,11 +4,11 @@ const passport = require('passport');
 const nodemailer = require('nodemailer');
 
 let transport = nodemailer.createTransport({
-    host: 'smtp.mailtrap.io',
-    port: 2525,
+    host: require('../../config/emailTransport').host,
+    port: require('../../config/emailTransport').port,
     auth: {
-        user: 'd887fe68147daf',
-        pass: '4532430063bcc2'
+        user: require('../../config/emailTransport').user,
+        pass: require('../../config/emailTransport').pass
     }
 });
 
@@ -27,7 +27,7 @@ router.get('/all',
     (req, res) => {
         RequestedVacation
             .find()
-            .populate('user', ['name', 'remaining_days','email'])
+            .populate('user', ['name', 'remaining_days', 'email'])
             .sort({ state: -1 })
             .then(requests => res.json(requests))
             .catch(err => res.status(404).json({ norequestsfound: 'No requests found' }));
@@ -66,11 +66,19 @@ router.post('/user',
                             end_date: req.body.end_date,
                             description: req.body.description
                         });
+                        const start_date = new Date(req.body.start_date);
+                        const start_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(start_date);
+                        const start_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(start_date);
+                        const start_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(start_date);
+                        const end_date = new Date(req.body.start_date);
+                        const end_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(end_date);
+                        const end_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(end_date);
+                        const end_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(end_date);
                         transport.sendMail({
-                            from: req.user.email,
+                            from: "admin@ecofa.hu",
                             to: "admin@ecofa.hu",
-                            subject: "szabadság igénylés tőle: " + req.user.name,
-                            text: req.user.name + " szeretne szabadságot " + req.body.start_date + " és " + req.body.end_date + " között."
+                            subject: "Szabadság igénylés tőle: " + req.user.name,
+                            text: req.user.name + " szeretne szabadságot " + start_year + "." + start_month + "." + start_day + " - " + end_year + "." + end_month + "." + end_day + " között."
                         });
                         newRequest
                             .save()
@@ -151,6 +159,14 @@ router.put('/admin/:id',
         const newState = {};
         newState.state = req.body.state;
         newState.color = req.body.color;
+        const start_date = new Date(req.body.start_date);
+        const start_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(start_date);
+        const start_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(start_date);
+        const start_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(start_date);
+        const end_date = new Date(req.body.start_date);
+        const end_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(end_date);
+        const end_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(end_date);
+        const end_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(end_date);
         RequestedVacation
             .findOneAndUpdate(
                 { _id: req.params.id },
@@ -165,12 +181,12 @@ router.put('/admin/:id',
                     .then(requests => res.json(requests))
                     .catch(err => res.status(404).json({ norequestsfound: 'No requests found' })))
             .catch(err => res.json(err))
-            transport.sendMail({
-                from: "admin@ecofa.hu",
-                to: req.body.email,
-                subject: "szabadság elbírálás",
-                text: "A(z) " + req.body.end_date+ " és " + req.body.start_date + " közötti szabadság " + req.body.state
-            });
+        transport.sendMail({
+            from: "admin@ecofa.hu",
+            to: req.body.email,
+            subject: "Szabadság elbírálás",
+            text: "A " + start_year + "." + start_month + "." + start_day + " - " + end_year + "." + end_month + "." + end_day + " közötti szabadság " + req.body.state
+        });
     }
 );
 
