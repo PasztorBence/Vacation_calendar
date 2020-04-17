@@ -74,10 +74,10 @@ export const createUnAllowing = (newData, history) => dispatch => {
     axios
         .post(' api/unallow/admin/', newData)
         .then(res =>
-                dispatch({
-                    type: GET_ALL_UNALLOWED_DATE,
-                    payload: res.data
-                }),
+            dispatch({
+                type: GET_ALL_UNALLOWED_DATE,
+                payload: res.data
+            }),
             history.push('/newunalloweddate'),
             window.location.reload
         )
@@ -95,10 +95,10 @@ export const deleteRequest = (id) => dispatch => {
     axios
         .delete(`api/request/user/${id}`)
         .then(res =>
-                dispatch({
-                    type: GET_REQUESTS,
-                    payload: res.data
-                }),
+            dispatch({
+                type: GET_REQUESTS,
+                payload: res.data
+            }),
             window.location.reload
         )
         .catch(err =>
@@ -191,10 +191,7 @@ export const changeRequestState = (id, newState) => dispatch => {
     axios
         .put(`api/request/admin/${id}`, newState)
         .then(res =>
-            dispatch({
-                type: GET_ALL_REQUESTS,
-                payload: res.data
-            }),
+            dispatch(getAllRequest()),
         )
         .catch(err =>
             dispatch({
@@ -209,16 +206,16 @@ export const changeRemainingDay = (id, newDay) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .put(`api/users/admin/${id}`, newDay)
-        .then(res =>
-                dispatch({
-                    type: GET_ALL_USER,
-                    payload: res.data
-                }),
+        /*.then(res =>
+            dispatch({
+                type: GET_ALL_USER,
+                payload: res.data,
+            }),
         )
         .catch(err =>
-                dispatch({
-                    type: GET_ALL_USER,
-                    payload: err.data
-                }),
-        )
+            dispatch({
+                type: GET_ALL_USER,
+                payload: err.data
+            }),
+        )*/
 };

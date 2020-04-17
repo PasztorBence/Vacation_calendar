@@ -22,6 +22,7 @@ mongoose
     //.connect('mongodb://localhost:27017/calendar', {useNewUrlParser: true})
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
+mongoose.set('useFindAndModify', false);
 
 // Passport middleware
 app.use(passport.initialize());

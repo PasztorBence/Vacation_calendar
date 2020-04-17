@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {PropTypes} from 'prop-types';
-import {connect} from 'react-redux';
-import {getAllRequest, changeRequestState, changeRemainingDay} from "../../actions/profileActions";
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
+import { getAllRequest, changeRequestState, changeRemainingDay } from "../../actions/profileActions";
 import Moment from "react-moment";
 
 class AdminTable extends Component {
@@ -33,17 +33,16 @@ class AdminTable extends Component {
                 remaining_days: remainingDays - diffInDays
             };
             this.props.changeRemainingDay(userId, newDays);
+            const newState = {
+                state: 'Elfogadva',
+                color: 'green',
+                start_date: startDate,
+                end_date: endDate,
+                email: email
+            };
+            this.props.changeRequestState(requestId, newState);
+            //this.props.getAllRequest();
         }
-        const newState = {
-            state: 'Elfogadva',
-            color: 'green',
-            start_date: startDate,
-            end_date: endDate,
-            email: email
-        };
-        this.props.changeRequestState(requestId, newState)
-        setTimeout(this.props.getAllRequest(), 1000)
-        //setTimeout(window.location.reload(),1000)
     }
 
     declineOnClick(requestId, userId, remainingDays, startDate, endDate, state, email) {
@@ -58,53 +57,55 @@ class AdminTable extends Component {
             };
             this.props.changeRemainingDay(userId, newDays);
         }
-        const newState = {
-            state: 'Elutasítva',
-            color: 'red', 
-            start_date: startDate,
-            end_date: endDate,
-            email: email
-        };
-        this.props.changeRequestState(requestId, newState);
-        setTimeout(this.props.getAllRequest(),1000)
-        //setTimeout(window.location.reload(),1000)
+        if ((state === 'Elfogadva') || (state === 'Függőben') ) {
+            const newState = {
+                state: 'Elutasítva',
+                color: 'red',
+                start_date: startDate,
+                end_date: endDate,
+                email: email
+            };
+            this.props.changeRequestState(requestId, newState);
+            //this.props.getAllRequest();
+            //setTimeout(window.location.reload(),1000)
+        }
     }
 
     render() {
-        const {loading, allRequests} = this.props.profile;
+        const { loading, allRequests } = this.props.profile;
         let tableContent;
         let tableItems;
 
         if (!(allRequests === null || loading)) {
             tableItems = allRequests.map(request => (
-                    <tr key={request._id}>
-                        <td>{request.user.name}</td>
-                        <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
-                        <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
-                        <td>{request.description}</td>
-                        <td><Moment format={"YYYY.MM.DD"}>{request.createdAt}</Moment></td>
-                        <td>{request.user.remaining_days}</td>
-                        <td>{request.state}</td>
-                        <td>
-                            <button
-                                type="button"
-                                className="btn btn-success"
-                                onClick={this.acceptOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email)}
-                            >
-                                Elfogad
+                <tr key={request._id}>
+                    <td>{request.user.name}</td>
+                    <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
+                    <td><Moment format={"YYYY.MM.DD"}>{request.end_date}</Moment></td>
+                    <td>{request.description}</td>
+                    <td><Moment format={"YYYY.MM.DD"}>{request.createdAt}</Moment></td>
+                    <td>{request.user.remaining_days}</td>
+                    <td>{request.state}</td>
+                    <td>
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={this.acceptOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email)}
+                        >
+                            Elfogad
                             </button>
-                        </td>
-                        <td>
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                onClick={this.declineOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email)}
-                            >
-                                Elutasít
+                    </td>
+                    <td>
+                        <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={this.declineOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email)}
+                        >
+                            Elutasít
                             </button>
-                        </td>
-                    </tr>
-                )
+                    </td>
+                </tr>
+            )
             )
         }
 
@@ -118,20 +119,20 @@ class AdminTable extends Component {
                         className="table table-sm table-bordered table-striped table-hover"
                     >
                         <thead>
-                        <tr>
-                            <th>Név</th>
-                            <th>Ettől</th>
-                            <th>Eddig</th>
-                            <th>Leírás</th>
-                            <th>Ekkor kérte</th>
-                            <th>Kérhető napok</th>
-                            <th>Állapot</th>
-                            <th>Elfogad</th>
-                            <th>Elutasít</th>
-                        </tr>
+                            <tr>
+                                <th>Név</th>
+                                <th>Ettől</th>
+                                <th>Eddig</th>
+                                <th>Leírás</th>
+                                <th>Ekkor kérte</th>
+                                <th>Kérhető napok</th>
+                                <th>Állapot</th>
+                                <th>Elfogad</th>
+                                <th>Elutasít</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {tableItems}
+                            {tableItems}
                         </tbody>
                     </table>
                 </div>
@@ -172,4 +173,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getAllRequest, changeRequestState, changeRemainingDay})(AdminTable);
+export default connect(mapStateToProps, { getAllRequest, changeRequestState, changeRemainingDay })(AdminTable);
