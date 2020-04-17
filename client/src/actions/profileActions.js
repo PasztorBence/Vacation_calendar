@@ -90,21 +90,17 @@ export const createUnAllowing = (newData, history) => dispatch => {
 };
 
 //Delete a request from the list
-export const deleteRequest = (id) => dispatch => {
+export const deleteRequest = (id, userId) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .delete(`api/request/user/${id}`)
         .then(res =>
-            dispatch({
-                type: GET_REQUESTS,
-                payload: res.data
-            }),
-            window.location.reload
+            dispatch(getRequests(userId)),
         )
         .catch(err =>
             dispatch({
                 type: GET_REQUESTS,
-                payload: err.data
+                payload: null
             })
         )
 };
@@ -206,16 +202,16 @@ export const changeRemainingDay = (id, newDay) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .put(`api/users/admin/${id}`, newDay)
-        /*.then(res =>
-            dispatch({
-                type: GET_ALL_USER,
-                payload: res.data,
-            }),
-        )
-        .catch(err =>
-            dispatch({
-                type: GET_ALL_USER,
-                payload: err.data
-            }),
-        )*/
+    /*.then(res =>
+        dispatch({
+            type: GET_ALL_USER,
+            payload: res.data,
+        }),
+    )
+    .catch(err =>
+        dispatch({
+            type: GET_ALL_USER,
+            payload: err.data
+        }),
+    )*/
 };

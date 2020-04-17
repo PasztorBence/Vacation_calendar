@@ -21,8 +21,7 @@ class UserTable extends Component {
     }
 
     deleteOnClick(id) {
-        this.props.deleteRequest(id, this.props.history);
-        this.props.getRequests(this.props.auth.user.id);
+        this.props.deleteRequest(id, this.props.auth.user.id);
     }
 
     render() {
