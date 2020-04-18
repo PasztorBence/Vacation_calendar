@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
-import {PropTypes} from 'prop-types';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import {
     getCurrentProfile,
     getRequests,
     deleteRequest,
     getAllUser,
-    changeRemainingDay
+    changeRemainingDay,
+    changeNotificationEmail
 } from "../../actions/profileActions";
 
 class RemainingDaysTable extends Component {
@@ -14,6 +15,7 @@ class RemainingDaysTable extends Component {
         super();
         this.state = {
             newDay: "",
+            newEmail: "",
             id: ""
         };
         this.onChange = this.onChange.bind(this);
@@ -35,22 +37,28 @@ class RemainingDaysTable extends Component {
     }
 
     onChange(e) {
-        this.setState({[e.target.name]: e.target.value});
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     onSubmit(e) {
         e.preventDefault();
         const id = this.state.id;
-        const newData = {
-            remaining_days: this.state.newDay
-        };
-        this.props.changeRemainingDay(id, newData);
-        setTimeout(this.props.getAllUser(), 3000)
-        //window.location.reload();
+        if (this.state.newDay !== "") {
+            const newData = {
+                remaining_days: this.state.newDay
+            };
+            this.props.changeRemainingDay(id, newData);
+        }
+        if (this.state.newEmail !== "") {
+            const newData = {
+                notification_email: this.state.newEmail
+            };
+            this.props.changeNotificationEmail(id, newData);
+        }
     }
 
     render() {
-        const {profile, loading, users} = this.props.profile;
+        const { profile, loading, users } = this.props.profile;
 
         let tableContent;
         let tableItems;
@@ -58,19 +66,20 @@ class RemainingDaysTable extends Component {
         if (!(users === null)) {
             console.log(users);
             tableItems = users.map(user => (
-                    <tr key={user._id}>
-                        <td>{user.name}</td>
-                        <td>{user.remaining_days}</td>
-                    </tr>
-                )
+                <tr key={user._id}>
+                    <td>{user.name}</td>
+                    <td>{user.remaining_days}</td>
+                    <td>{user.notification_email}</td>
+                </tr>
+            )
             );
             selectOptions = users.map(user => (
-                    <option key={user._id}
-                            value={user._id}
-                    >
-                        {user.name}
-                    </option>
-                )
+                <option key={user._id}
+                    value={user._id}
+                >
+                    {user.name}
+                </option>
+            )
             );
         }
         if (profile === null || loading) {
@@ -83,15 +92,16 @@ class RemainingDaysTable extends Component {
             tableContent = (
                 <div className="table-responsive">
                     <table id="mytable"
-                           className="table table-sm table-bordered table-striped table-hover col-lg-4 col-md-6">
+                        className="table table-sm table-bordered table-striped table-hover col-lg-4 col-md-6">
                         <thead>
-                        <tr>
-                            <th>Dolgozó</th>
-                            <th>Jelenleg kérhető napok</th>
-                        </tr>
+                            <tr>
+                                <th>Dolgozó</th>
+                                <th>Jelenleg kérhető napok</th>
+                                <th>Telephely e-mail</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {tableItems}
+                            {tableItems}
                         </tbody>
                     </table>
                 </div>
@@ -107,9 +117,9 @@ class RemainingDaysTable extends Component {
                             <div className="form-group">
                                 <h4>Kérhető napok módosítása:</h4>
                                 <select className="form-control col-lg-4"
-                                        name="id"
-                                        value={this.state.id}
-                                        onChange={this.onChange}
+                                    name="id"
+                                    value={this.state.id}
+                                    onChange={this.onChange}
                                 >
                                     <option
                                     >
@@ -118,14 +128,21 @@ class RemainingDaysTable extends Component {
                                     {selectOptions}
                                 </select>
                                 <input type="number"
-                                       className="form-control col-lg-4"
-                                       placeholder="Új napok száma"
-                                       name="newDay"
-                                       value={this.state.newDay}
-                                       onChange={this.onChange}
+                                    className="form-control col-lg-4"
+                                    placeholder="Új napok száma"
+                                    name="newDay"
+                                    value={this.state.newDay}
+                                    onChange={this.onChange}
+                                />
+                                <input type="e-mail"
+                                    className="form-control col-lg-4"
+                                    placeholder="Telephely e-mail"
+                                    name="newEmail"
+                                    value={this.state.newEmail}
+                                    onChange={this.onChange}
                                 />
                                 <input type="submit"
-                                       className="btn btn-info btn-block mt-4 col-lg-4"
+                                    className="btn btn-info btn-block mt-4 col-lg-4"
                                 />
                             </div>
                         </form>
@@ -144,6 +161,7 @@ RemainingDaysTable.propTypes = {
     deleteRequest: PropTypes.func.isRequired,
     getAllUser: PropTypes.func.isRequired,
     changeRemainingDay: PropTypes.func.isRequired,
+    changeNotificationEmail: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired
 };
@@ -158,5 +176,6 @@ export default connect(mapStateToProps, {
     getRequests,
     deleteRequest,
     getAllUser,
-    changeRemainingDay
+    changeRemainingDay,
+    changeNotificationEmail
 })(RemainingDaysTable);

@@ -22,7 +22,7 @@ class AdminTable extends Component {
         }
     }
 
-    acceptOnClick(requestId, userId, remainingDays, startDate, endDate, state, email) {
+    acceptOnClick(requestId, userId, remainingDays, startDate, endDate, state, email, notification_email) {
         if (state !== 'Elfogadva') {
             //Calculating the difference of the start and the end date
             const end = new Date(endDate);
@@ -38,14 +38,14 @@ class AdminTable extends Component {
                 color: 'green',
                 start_date: startDate,
                 end_date: endDate,
-                email: email
+                email: email,
+                notification_email: notification_email
             };
             this.props.changeRequestState(requestId, newState);
-            //this.props.getAllRequest();
         }
     }
 
-    declineOnClick(requestId, userId, remainingDays, startDate, endDate, state, email) {
+    declineOnClick(requestId, userId, remainingDays, startDate, endDate, state, email, notification_email) {
         if (state === 'Elfogadva') {
             //Calculating the difference of the start and the end date
             const end = new Date(endDate);
@@ -57,17 +57,16 @@ class AdminTable extends Component {
             };
             this.props.changeRemainingDay(userId, newDays);
         }
-        if ((state === 'Elfogadva') || (state === 'Függőben') ) {
+        if ((state === 'Elfogadva') || (state === 'Függőben')) {
             const newState = {
                 state: 'Elutasítva',
                 color: 'red',
                 start_date: startDate,
                 end_date: endDate,
-                email: email
+                email: email,
+                notification_email: notification_email
             };
             this.props.changeRequestState(requestId, newState);
-            //this.props.getAllRequest();
-            //setTimeout(window.location.reload(),1000)
         }
     }
 
@@ -90,7 +89,7 @@ class AdminTable extends Component {
                         <button
                             type="button"
                             className="btn btn-success"
-                            onClick={this.acceptOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email)}
+                            onClick={this.acceptOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email, request.user.notification_email)}
                         >
                             Elfogad
                             </button>
@@ -99,7 +98,7 @@ class AdminTable extends Component {
                         <button
                             type="button"
                             className="btn btn-danger"
-                            onClick={this.declineOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email)}
+                            onClick={this.declineOnClick.bind(this, request._id, request.user._id, request.user.remaining_days, request.start_date, request.end_date, request.state, request.user.email, request.user.notification_email)}
                         >
                             Elutasít
                             </button>

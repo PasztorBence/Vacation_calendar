@@ -27,7 +27,7 @@ router.get('/all',
     (req, res) => {
         RequestedVacation
             .find()
-            .populate('user', ['name', 'remaining_days', 'email'])
+            .populate('user', ['name', 'remaining_days', 'email', 'notification_email'])
             .sort({ state: -1 })
             .then(requests => res.json(requests))
             .catch(err => res.status(404).json({ norequestsfound: 'No requests found' }));
@@ -75,8 +75,8 @@ router.post('/user',
                         const end_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(end_date);
                         const end_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(end_date);
                         transport.sendMail({
-                            from: "admin@ecofa.hu",
-                            to: "admin@ecofa.hu",
+                            from: "info@ecofa.hu",
+                            to: req.user.notification_email,
                             subject: "Szabadság igénylés tőle: " + req.user.name,
                             text: req.user.name + " szeretne szabadságot " + start_year + "." + start_month + "." + start_day + " - " + end_year + "." + end_month + "." + end_day + " között."
                         });
@@ -182,7 +182,7 @@ router.put('/admin/:id',
                     .catch(err => res.status(404).json({ norequestsfound: 'No requests found' })))
             .catch(err => res.json(err))
         transport.sendMail({
-            from: "admin@ecofa.hu",
+            from: req.body.notification_email,
             to: req.body.email,
             subject: "Szabadság elbírálás",
             text: "A " + start_year + "." + start_month + "." + start_day + " - " + end_year + "." + end_month + "." + end_day + " közötti szabadság " + req.body.state

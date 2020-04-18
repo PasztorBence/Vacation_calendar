@@ -11,6 +11,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    notification_email: {
+        type: String,
+        default:'info@ecofa.hu'
+    },
     password: {
         type: String,
         required: true

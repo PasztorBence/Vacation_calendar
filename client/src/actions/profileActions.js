@@ -202,16 +202,29 @@ export const changeRemainingDay = (id, newDay) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .put(`api/users/admin/${id}`, newDay)
-    /*.then(res =>
-        dispatch({
-            type: GET_ALL_USER,
-            payload: res.data,
-        }),
-    )
-    .catch(err =>
-        dispatch({
-            type: GET_ALL_USER,
-            payload: err.data
-        }),
-    )*/
+        .then(res =>
+            dispatch(getAllUser()),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ALL_USER,
+                payload: null
+            }),
+        )
+};
+
+//Set the the notification e-mail adress of a user
+export const changeNotificationEmail = (id, newEmail) => dispatch => {
+    dispatch(setProfileLoading());
+    axios
+        .put(`api/users/nemail/${id}`, newEmail)
+        .then(res =>
+            dispatch(getAllUser()),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ALL_USER,
+                payload: null
+            }),
+        )
 };

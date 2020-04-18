@@ -16,16 +16,16 @@ const User = require('../../models/user');
 //@description  Felhasználó regisztrálás
 //@access       Public
 router.post('/register', (req, res) => {
-    const {errors, isValid} = validateRegisterInput(req.body);
+    const { errors, isValid } = validateRegisterInput(req.body);
     //Check validation
     if (!isValid) {
         return res.status(400).json(errors);
     }
-    User.findOne({email: req.body.email})
+    User.findOne({ email: req.body.email })
         .then(user => {
             if (user) {
                 errors.email = 'Ez az e-mail cím már regisztrálva van!';
-                return res.status(400).json({email: errors})
+                return res.status(400).json({ email: errors })
             } else {
                 const newUser = new User({
                     name: req.body.name,
@@ -52,7 +52,7 @@ router.post('/register', (req, res) => {
 //@access       Public
 router.post('/login', (req, res) => {
 
-    const {errors, isValid} = validateLoginInput(req.body);
+    const { errors, isValid } = validateLoginInput(req.body);
     //Check validation
     if (!isValid) {
         return res.status(400).json(errors);
@@ -62,7 +62,7 @@ router.post('/login', (req, res) => {
     const password = req.body.password;
 
     //find user by email
-    User.findOne({email})
+    User.findOne({ email })
         .then(user => {
             //check for user
             if (!user) {
@@ -85,7 +85,7 @@ router.post('/login', (req, res) => {
                         jwt.sign(
                             payload,
                             keys.secretOrKey,
-                            {expiresIn: 36000},
+                            { expiresIn: 36000 },
                             (err, token) => {
                                 res.json({
                                     success: true,
@@ -104,7 +104,7 @@ router.post('/login', (req, res) => {
 //@description  A bejelentkezett felhasználót adja vissza
 //@access       Private
 router.get('/current',
-    passport.authenticate('jwt', {session: false}),
+    passport.authenticate('jwt', { session: false }),
     (req, res) => {
         res.json({
             id: req.user.id,
@@ -119,7 +119,7 @@ router.get('/current',
 //@description  Minden felhasználót kilistáz
 //@access       Private
 router.get('/all',
-    passport.authenticate('jwt', {session: false}),
+    passport.authenticate('jwt', { session: false }),
     (req, res) => {
         User.find()
             .then(users => {
@@ -130,7 +130,7 @@ router.get('/all',
                 res.json(users);
             })
             .catch(err => {
-                res.status(404).json({profile: 'There are no profiles'})
+                res.status(404).json({ profile: 'There are no profiles' })
             })
     });
 
@@ -138,15 +138,15 @@ router.get('/all',
 //@description  Hátralévő napok módosítása adott felhasználónak
 //@access       Private
 router.put('/admin/:id',
-    passport.authenticate('jwt', {session: false}),
+    passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const newRemainingDays = {};
         newRemainingDays.remaining_days = req.body.remaining_days;
         User
             .findOneAndUpdate(
-                {_id: req.params.id},
-                {$set: newRemainingDays},
-                {new: true}
+                { _id: req.params.id },
+                { $set: newRemainingDays },
+                { new: true }
             )
             .then(User.find()
                 .then(users => {
@@ -157,13 +157,46 @@ router.put('/admin/:id',
                     res.json(users);
                 })
                 .catch(err => {
-                    res.status(404).json({profile: 'There are no profiles'})
+                    res.status(404).json({ profile: 'There are no profiles' })
                 })
             )
             .catch(err => {
-                res.status(400).json({remainingday: 'Cant update remaining days'})
+                res.status(400).json({ remainingday: 'Cant update remaining days' })
             })
 
     });
+
+//@route        PUT api/users/nemail/:id
+//@description  telephely e-mail címének módosítása adott felhasználónak
+//@access       Private
+router.put('/nemail/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        const newEmail = {};
+        newEmail.notification_email = req.body.notification_email;
+        User
+            .findOneAndUpdate(
+                { _id: req.params.id },
+                { $set: newEmail },
+                { new: true }
+            )
+            .then(User.find()
+                .then(users => {
+                    if (!users) {
+                        errors.nouser = 'There is no users';
+                        return res.status(404).json(errors);
+                    }
+                    res.json(users);
+                })
+                .catch(err => {
+                    res.status(404).json({ profile: 'There are no profiles' })
+                })
+            )
+            .catch(err => {
+                res.status(400).json({ notification_email: 'Cant update the notification e-mail' })
+            })
+
+    });
+
 
 module.exports = router;
