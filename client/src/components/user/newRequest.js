@@ -43,9 +43,9 @@ class NewRequest extends Component {
             end_date: this.state.end_date,
             description: this.state.description,
         };
-        this.props.createRequest(newData, this.props.history);
-        this.props.getRequests(this.props.auth.user.id);
-        setTimeout(this.props.history.push('/user'), 30000);
+        this.props.createRequest(newData, this.props.history)
+        //this.props.getRequests(this.props.auth.user.id);
+        //this.props.history.push('/user')
     }
 
     onChange(e) {

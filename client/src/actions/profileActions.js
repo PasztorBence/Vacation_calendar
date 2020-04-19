@@ -66,6 +66,19 @@ export const createRequest = (newData, history) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .post('api/request/user/', newData)
+        .then(
+            axios
+                .get(`/api/request/user/${newData.id}`)
+                .then(
+                    history.push('/user')
+                )
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_REQUESTS,
+                payload: null
+            })
+        );
 };
 
 //Create a new unAllowed date

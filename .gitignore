@@ -1,5 +1,6 @@
 /node_modules
-/config
+/config/keys.js
+/config/passport.js
 package-lock.json
 .idea
 /client/node_modules
