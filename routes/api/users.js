@@ -110,6 +110,7 @@ router.get('/current',
             id: req.user.id,
             name: req.user.name,
             email: req.user.email,
+            notification_email: req.user.notification_email,
             remaining_days: req.user.remaining_days,
             user_level: req.user.user_level
         });

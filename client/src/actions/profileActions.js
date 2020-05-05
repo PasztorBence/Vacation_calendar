@@ -103,10 +103,10 @@ export const createUnAllowing = (newData, history) => dispatch => {
 };
 
 //Delete a request from the list
-export const deleteRequest = (id, userId) => dispatch => {
+export const deleteRequest = (id, userId, mailData) => dispatch => {
     dispatch(setProfileLoading());
     axios
-        .delete(`api/request/user/${id}`)
+        .put(`api/request/user/${id}`, mailData)
         .then(res =>
             dispatch(getRequests(userId)),
         )
@@ -175,16 +175,13 @@ export const getAllUser = () => dispatch => {
         )
 };
 
-//Delete a request from the list
-export const deleteUnAllowing = (id, history) => dispatch => {
+//Delete a unallowing from the list
+export const deleteUnAllowing = (id) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .delete(`api/unallow/admin/${id}`)
         .then(res =>
-            dispatch({
-                type: GET_ALL_UNALLOWED_DATE,
-                payload: res.data
-            }),
+            dispatch(getAllUnAllowedDate()),
         )
         .catch(err =>
             dispatch({

@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {PropTypes} from 'prop-types';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import {getCurrentProfile, getAllUnAllowedDate,deleteUnAllowing} from "../../actions/profileActions";
+import { getCurrentProfile, getAllUnAllowedDate, deleteUnAllowing } from "../../actions/profileActions";
 
 class UnAllowedTable extends Component {
 
@@ -21,37 +21,36 @@ class UnAllowedTable extends Component {
     }
 
     deleteOnClick(id) {
-        this.props.deleteUnAllowing(id,this, this.props.history);
-        setTimeout(this.props.getAllUnAllowedDate(),3000)
-        //window.location.reload();
+        this.props.deleteUnAllowing(id, this, this.props.history);
+        this.props.getAllUnAllowedDate();
     }
 
     render() {
-        const {profile, loading, unAllowedDates} = this.props.profile;
+        const { profile, loading, unAllowedDates } = this.props.profile;
 
         let tableContent;
         let tableItems;
         if (!(unAllowedDates === null)) {
             tableItems = unAllowedDates.map(date => (
-                    <tr key={date._id}>
-                        <td><Moment format={"YYYY.MM.DD"}>{date.start_date}</Moment></td>
-                        <td>{date.description}</td>
-                        <td>
-                            <p data-placement="top"
-                               data-toggle="tooltip"
-                               title="Delete">
-                                <button onClick={this.deleteOnClick.bind(this, date._id)}
-                                        className="btn btn-danger btn-xs"
-                                        data-title="Delete"
-                                        data-toggle="modal"
-                                        data-target="#delete"
-                                >
-                                    Törlés
+                <tr key={date._id}>
+                    <td><Moment format={"YYYY.MM.DD"}>{date.start_date}</Moment></td>
+                    <td>{date.description}</td>
+                    <td>
+                        <p data-placement="top"
+                            data-toggle="tooltip"
+                            title="Delete">
+                            <button onClick={this.deleteOnClick.bind(this, date._id)}
+                                className="btn btn-danger btn-xs"
+                                data-title="Delete"
+                                data-toggle="modal"
+                                data-target="#delete"
+                            >
+                                Törlés
                                 </button>
-                            </p>
-                        </td>
-                    </tr>
-                )
+                        </p>
+                    </td>
+                </tr>
+            )
             );
         }
         if (profile === null || loading) {
@@ -61,14 +60,14 @@ class UnAllowedTable extends Component {
                 <div className="table-responsive">
                     <table id="mytable" className="table table-sm table-bordered table-striped table-hover">
                         <thead>
-                        <tr>
-                            <th>dátum</th>
-                            <th>Leírás</th>
-                            <th>Törlés</th>
-                        </tr>
+                            <tr>
+                                <th>dátum</th>
+                                <th>Leírás</th>
+                                <th>Törlés</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {tableItems}
+                            {tableItems}
                         </tbody>
                     </table>
                 </div>
@@ -108,4 +107,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, {getCurrentProfile, getAllUnAllowedDate,deleteUnAllowing})(UnAllowedTable);
+export default connect(mapStateToProps, { getCurrentProfile, getAllUnAllowedDate, deleteUnAllowing })(UnAllowedTable);

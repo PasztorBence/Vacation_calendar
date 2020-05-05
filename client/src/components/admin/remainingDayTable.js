@@ -115,7 +115,7 @@ class RemainingDaysTable extends Component {
                     <div className="col-md">
                         <form onSubmit={this.onSubmit}>
                             <div className="form-group">
-                                <h4>Kérhető napok módosítása:</h4>
+                                <h4>Adatok módosítása:</h4>
                                 <select className="form-control col-lg-4"
                                     name="id"
                                     value={this.state.id}
@@ -146,7 +146,7 @@ class RemainingDaysTable extends Component {
                                 />
                             </div>
                         </form>
-                        <h4>Kérhető napok:</h4>
+                        
                         {tableContent}
                     </div>
                 </div>
