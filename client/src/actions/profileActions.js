@@ -7,6 +7,7 @@ import {
     GET_ALL_REQUESTS,
     GET_ALL_UNALLOWED_DATE,
     GET_ALL_USER,
+    GET_ERRORS
 } from "./types";
 
 //Get current profile
@@ -55,8 +56,8 @@ export const getRequests = id => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_REQUESTS,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         );
 };
@@ -75,8 +76,8 @@ export const createRequest = (newData, history) => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_REQUESTS,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         );
 };
@@ -96,8 +97,8 @@ export const createUnAllowing = (newData, history) => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_UNALLOWED_DATE,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         )
 };
@@ -112,8 +113,24 @@ export const deleteRequest = (id, userId, mailData) => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_REQUESTS,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        )
+};
+
+//Rethink a request from the list
+export const reThinkRequest = (id, userId, mailData) => dispatch => {
+    dispatch(setProfileLoading());
+    axios
+        .put(`api/request/rethink/${id}`, mailData)
+        .then(res =>
+            dispatch(getRequests(userId)),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         )
 };
@@ -131,8 +148,8 @@ export const getAllRequest = () => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_REQUESTS,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         )
 };
@@ -150,8 +167,8 @@ export const getAllUnAllowedDate = () => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_UNALLOWED_DATE,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         )
 };
@@ -169,8 +186,8 @@ export const getAllUser = () => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_USER,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         )
 };
@@ -185,8 +202,8 @@ export const deleteUnAllowing = (id) => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_UNALLOWED_DATE,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         )
 };
@@ -201,8 +218,8 @@ export const changeRequestState = (id, newState) => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_REQUESTS,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         )
 };
@@ -217,8 +234,8 @@ export const changeRemainingDay = (id, newDay) => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_USER,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
             }),
         )
 };
@@ -233,8 +250,46 @@ export const changeNotificationEmail = (id, newEmail) => dispatch => {
         )
         .catch(err =>
             dispatch({
-                type: GET_ALL_USER,
-                payload: null
+                type: GET_ERRORS,
+                payload: err.response.data
+            }),
+        )
+};
+
+//Set the email of a user
+export const changeEmail = (id, newData) => dispatch => {
+    dispatch(setProfileLoading());
+    axios
+        .put(`api/users/email/${id}`, newData)
+        .then(res =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: ''
+            }),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            }),
+        )
+};
+
+//Set the password of a user
+export const changePassword = (id, newData) => dispatch => {
+    dispatch(setProfileLoading());
+    axios
+        .put(`api/users/password/${id}`, newData)
+        .then(res =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: ''
+            }),
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
             }),
         )
 };

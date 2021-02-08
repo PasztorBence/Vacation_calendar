@@ -33,7 +33,6 @@ module.exports = function validateRegisterInput(data) {
     if (!Validator.equals(data.password, data.password2)) {
         errors.password = 'A jelszavaknak egyezniük kell!';
     }
-
     return {
         errors,
         isValid: isEmpty(errors)

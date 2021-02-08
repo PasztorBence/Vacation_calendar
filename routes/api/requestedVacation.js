@@ -70,7 +70,7 @@ router.post('/user',
                         const start_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(start_date);
                         const start_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(start_date);
                         const start_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(start_date);
-                        const end_date = new Date(req.body.start_date);
+                        const end_date = new Date(req.body.end_date);
                         const end_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(end_date);
                         const end_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(end_date);
                         const end_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(end_date);
@@ -115,7 +115,7 @@ router.put('/user/:id',
         const start_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(start_date);
         const start_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(start_date);
         const start_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(start_date);
-        const end_date = new Date(req.body.start_date);
+        const end_date = new Date(req.body.end_date);
         const end_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(end_date);
         const end_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(end_date);
         const end_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(end_date);
@@ -125,7 +125,7 @@ router.put('/user/:id',
             subject: "Szabadság igénylést törölt: " + req.user.name,
             text: req.user.name + " törölte a(z) " + start_year + "." + start_month + "." + start_day + " - " + end_year + "." + end_month + "." + end_day + " intervallumba kért igénylést."
         });
-        RequestedVacation 
+        RequestedVacation
             .deleteOne({ _id: req.params.id })
             .then(RequestedVacation
                 .find({ user: req.params.id })
@@ -134,6 +134,34 @@ router.put('/user/:id',
                 .catch(err => res.status(404).json({ norequestfound: 'No request found with that id' }))
             )
             .catch(err => res.status(404).json({ norequestfound: 'No request found with that id' }))
+    }
+);
+
+//@route        DELETE api/request/rethink/:id
+//@description  A dolgozó állapotmódosítást kér egy kérvényre
+//@access       Private
+router.put('/rethink/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        const start_date = new Date(req.body.start_date);
+        const start_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(start_date);
+        const start_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(start_date);
+        const start_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(start_date);
+        const end_date = new Date(req.body.end_date);
+        const end_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(end_date);
+        const end_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(end_date);
+        const end_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(end_date);
+        transport.sendMail({
+            from: "info@ecofa.hu",
+            to: req.user.notification_email,
+            subject: "Kérvény állapotmódosítást kér: " + req.user.name,
+            text: req.user.name + " állapotmódosítást kér a(z) " + start_year + "." + start_month + "." + start_day + " - " + end_year + "." + end_month + "." + end_day + " intervallumba kért igénylésre."
+        });
+        RequestedVacation
+                .find({ user: req.params.id })
+                .sort({ state: -1 })
+                .then(post => res.json(post))
+                .catch(err => res.status(404).json({ norequestfound: 'No request found with that id' }))
     }
 );
 
@@ -173,11 +201,12 @@ router.put('/admin/:id',
         const newState = {};
         newState.state = req.body.state;
         newState.color = req.body.color;
+        newState.text_color = req.body.text_color;
         const start_date = new Date(req.body.start_date);
         const start_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(start_date);
         const start_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(start_date);
         const start_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(start_date);
-        const end_date = new Date(req.body.start_date);
+        const end_date = new Date(req.body.end_date);
         const end_day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(end_date);
         const end_month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(end_date);
         const end_year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(end_date);
@@ -203,5 +232,4 @@ router.put('/admin/:id',
         });
     }
 );
-
 module.exports = router;

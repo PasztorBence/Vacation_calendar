@@ -5,6 +5,7 @@ import FullCalendar from "@fullcalendar/react";
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { getAllRequest, getAllUnAllowedDate } from "../../actions/profileActions";
+//import { whenTransitionDone } from '@fullcalendar/core';
 
 class MainCalendar extends Component {
 
@@ -37,6 +38,7 @@ class MainCalendar extends Component {
                         start: request.start_date,
                         end: new Date(request.end_date).setDate(new Date(request.end_date).getDate() + 1),
                         color: request.color,
+                        textColor: request.text_color,
                         allDay: true,
                     }
                 )

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import { getCurrentProfile, getRequests, deleteRequest } from "../../actions/profileActions";
+import { getCurrentProfile, getRequests, deleteRequest, reThinkRequest } from "../../actions/profileActions";
 
 class UserTable extends Component {
 
@@ -27,8 +27,17 @@ class UserTable extends Component {
             notification_email: this.props.profile.profile.notification_email,
             name: this.props.profile.profile.name
         }
-        //console.log(mailData);
         this.props.deleteRequest(id, this.props.auth.user.id, mailData);
+    }
+
+    reThinkOnClick(id, startDate, endDate) {
+        const mailData = {
+            start_date: startDate,
+            end_date: endDate,
+            notification_email: this.props.profile.profile.notification_email,
+            name: this.props.profile.profile.name
+        }
+        this.props.reThinkRequest(id, this.props.auth.user.id, mailData);
     }
 
     render() {
@@ -38,7 +47,6 @@ class UserTable extends Component {
         let tableItems;
         let availableDays;
         if (!(requests === null || loading)) {
-            //console.log(requests);
             tableItems = requests.map(request => (
                 <tr key={request._id}>
                     <td><Moment format={"YYYY.MM.DD"}>{request.start_date}</Moment></td>
@@ -46,18 +54,28 @@ class UserTable extends Component {
                     <td>{request.description}</td>
                     <td>{request.state}</td>
                     <td>
-                        <p data-placement="top"
-                            data-toggle="tooltip"
-                            title="Delete">
-                            <button onClick={this.deleteOnClick.bind(this, request._id, request.start_date, request.end_date)}
+                        {request.state === 'Függőben' &&
+                            <button
+                                onClick={this.deleteOnClick.bind(this, request._id, request.start_date, request.end_date)}
                                 className="btn btn-danger btn-xs"
                                 data-title="Delete"
                                 data-toggle="modal"
                                 data-target="#delete"
                             >
                                 Törlés
-                                </button>
-                        </p>
+                            </button>
+                        }
+                        {request.state !== 'Függőben' &&
+                            <button
+                                onClick={this.reThinkOnClick.bind(this, request._id, request.start_date, request.end_date)}
+                                className="btn btn-primary btn-xs"
+                                data-title="Delete"
+                                data-toggle="modal"
+                                data-target="#delete"
+                            >
+                                Felülbírálás kérése
+                            </button>
+                        }
                     </td>
                 </tr>
             ));
@@ -118,4 +136,4 @@ const mapStateToProps = (state) => ({
     profile: state.profile
 });
 
-export default connect(mapStateToProps, { getCurrentProfile, getRequests, deleteRequest })(UserTable);
+export default connect(mapStateToProps, { getCurrentProfile, getRequests, deleteRequest, reThinkRequest })(UserTable);

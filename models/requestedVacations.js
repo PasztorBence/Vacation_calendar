@@ -23,6 +23,10 @@ const RequestedVacationSchema = new Schema({
         type: String,
         default: 'yellow'
     },
+    text_color: {
+        type: String,
+        default: 'black'
+    },
     description: {
         type: String
     }

@@ -36,6 +36,7 @@ class AdminTable extends Component {
             const newState = {
                 state: 'Elfogadva',
                 color: 'green',
+                text_color: 'white',
                 start_date: startDate,
                 end_date: endDate,
                 email: email,
@@ -61,6 +62,7 @@ class AdminTable extends Component {
             const newState = {
                 state: 'Elutasítva',
                 color: 'red',
+                text_color: 'white',
                 start_date: startDate,
                 end_date: endDate,
                 email: email,
@@ -137,7 +139,6 @@ class AdminTable extends Component {
                 </div>
             )
         }
-
 
         return (
             <div className="container-fluid">

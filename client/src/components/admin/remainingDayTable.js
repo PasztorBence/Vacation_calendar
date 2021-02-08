@@ -64,7 +64,6 @@ class RemainingDaysTable extends Component {
         let tableItems;
         let selectOptions;
         if (!(users === null)) {
-            console.log(users);
             tableItems = users.map(user => (
                 <tr key={user._id}>
                     <td>{user.name}</td>

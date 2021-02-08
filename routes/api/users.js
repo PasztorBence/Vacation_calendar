@@ -8,9 +8,13 @@ const passport = require('passport');
 //Load input validation
 const validateRegisterInput = require('../../validators/register');
 const validateLoginInput = require('../../validators/login');
+const validateEmailChange = require('../../validators/emailChangeValidation');
+const validatePasswordChange = require('../../validators/passwordChangeValidation');
 
 //Load user model
 const User = require('../../models/user');
+const passwordChangeValidation = require('../../validators/passwordChangeValidation');
+const emailChangeValidation = require('../../validators/emailChangeValidation');
 
 //@route        POST api/users/register
 //@description  Felhasználó regisztrálás
@@ -74,13 +78,11 @@ router.post('/login', (req, res) => {
                 .then(isMatch => {
                     if (isMatch) {
                         //user Matched
-
                         const payload = { // Create JWT Payload
                             id: user.id,
                             name: user.name,
                             user_level: user.user_level
                         };
-
                         //Sign Token
                         jwt.sign(
                             payload,
@@ -164,7 +166,6 @@ router.put('/admin/:id',
             .catch(err => {
                 res.status(400).json({ remainingday: 'Cant update remaining days' })
             })
-
     });
 
 //@route        PUT api/users/nemail/:id
@@ -196,8 +197,85 @@ router.put('/nemail/:id',
             .catch(err => {
                 res.status(400).json({ notification_email: 'Cant update the notification e-mail' })
             })
-
     });
 
+//@route        PUT api/users/password/:id
+//@description  jelszó módosítása adott felhasználónak
+//@access       Private
+router.put('/password/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        const { errors, isValid } = passwordChangeValidation(req.body);
+        //Check validation
+        if (!isValid) {
+            return res.status(400).json(errors);
+        }
+        const newPassword = {};
+        newPassword.password = req.body.password;
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newPassword.password, salt, (err, hash) => {
+                if (err) throw err;
+                newPassword.password = hash;
+                User
+                    .findOneAndUpdate(
+                        { _id: req.params.id },
+                        { $set: newPassword },
+                        { new: true }
+                    )
+                    .then(User.find()
+                        .then(users => {
+                            if (!users) {
+                                errors.nouser = 'There is no users';
+                                return res.status(404).json(errors);
+                            }
+                            res.json(users);
+                        })
+                        .catch(err => {
+                            res.status(404).json({ profile: 'There are no profiles' })
+                        })
+                    )
+                    .catch(err => {
+                        res.status(400).json({ remainingday: 'Cant change password' })
+                    })
+            })
+        })
+    });
+
+//@route        PUT api/users/email/:id
+//@description  e-mail cím módosítása adott felhasználónak
+//@access       Private
+router.put('/email/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        console.log(req.body)
+        const { errors, isValid } = emailChangeValidation(req.body);
+        //Check validation
+        if (!isValid) {
+            return res.status(400).json(errors);
+        }
+        const newEmail = {};
+        newEmail.email = req.body.email;
+        User
+            .findOneAndUpdate(
+                { _id: req.params.id },
+                { $set: newEmail },
+                { new: true }
+            )
+            .then(User.find()
+                .then(users => {
+                    if (!users) {
+                        errors.nouser = 'There is no users';
+                        return res.status(404).json(errors);
+                    }
+                    res.json(users);
+                })
+                .catch(err => {
+                    res.status(404).json({ profile: 'There are no profiles' })
+                })
+            )
+            .catch(err => {
+                res.status(400).json({ remainingday: 'Cant change password' })
+            })
+    });
 
 module.exports = router;

@@ -44,8 +44,6 @@ class NewRequest extends Component {
             description: this.state.description,
         };
         this.props.createRequest(newData, this.props.history)
-        //this.props.getRequests(this.props.auth.user.id);
-        //this.props.history.push('/user')
     }
 
     onChange(e) {
